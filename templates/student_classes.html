@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Sessions - Jamia Imam Navavi-ra</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=14.0">
+    <style>
+        body { 
+            margin: 0; padding: 40px; 
+            background: #f3f6f9 !important; 
+            color: #1e293b; 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+            min-height: 100vh; 
+        }
+        .container { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+        .dash-wrapper { 
+            background: #ffffff !important; 
+            border: 1px solid #e9ecef !important; 
+            border-radius: 16px !important; 
+            padding: 32px; 
+            box-shadow: 0 4px 24px rgba(0,0,0,0.04) !important; 
+        }
+        .classes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(440px, 1fr)); gap: 24px; margin-top: 15px; }
+        
+        .mod-item {
+            background: #ffffff !important; 
+            border: 1px solid #e9ecef !important; 
+            border-radius: 14px !important; 
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02) !important; 
+            border-top: 4px solid #38bdf8 !important; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 12px; 
+            transition: all 0.3s ease;
+        }
+        .mod-item:hover { transform: translateY(-5px) !important; box-shadow: 0 16px 35px rgba(0,0,0,0.08) !important; }
+        
+        .video-container { 
+            position: relative; 
+            width: 100%; 
+            padding-bottom: 56.25%; 
+            height: 0; 
+            overflow: hidden; 
+            border-radius: 10px; 
+            background: #000000; 
+        }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+        
+        .subject-badge { background: #e0f2fe !important; color: #0284c7 !important; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.8em; text-transform: uppercase; align-self: flex-start; }
+
+        .watch-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444 !important;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            padding: 9px 15px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .watch-btn:hover {
+            background: #ef4444;
+            color: #ffffff !important;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        /* Dark Mode Overrides */
+        body.dark-mode { background: #05080f !important; color: #f8fafc !important; }
+        body.dark-mode .dash-wrapper, body.dark-mode .mod-item { 
+            background: #0f172a !important; 
+            border: 1px solid rgba(255, 255, 255, 0.06) !important; 
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5) !important; 
+        }
+        body.dark-mode h1, body.dark-mode h3 { color: #f8fafc !important; }
+        body.dark-mode p, body.dark-mode span { color: #94a3b8 !important; }
+        body.dark-mode .subject-badge { background: rgba(56, 189, 248, 0.1) !important; color: #38bdf8 !important; }
+    </style>
+</head>
+<body class="dark-mode">
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <div>
+                <h1 style="font-size: 2em; margin: 0; font-weight: 800;"><i class="fa-solid fa-video" style="color: #38bdf8;"></i> Class Sessions</h1>
+                <p style="margin-top: 6px; font-size: 15px;">Watch faculty video lessons directly inside your portal.</p>
+            </div>
+            <a href="{{ url_for('student_dashboard') }}" style="color: #38bdf8; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-arrow-left"></i> Back to Portal
+            </a>
+        </div>
+
+        <div class="dash-wrapper">
+            <div class="classes-grid">
+                {% if classes %}
+                    {% for item in classes %}
+                    <div class="mod-item">
+                        <div class="video-container">
+                            <iframe 
+                                src="{{ item[3] }}" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                referrerpolicy="strict-origin-when-cross-origin" 
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+                            <span class="subject-badge">{{ item[1] }}</span>
+                            <span style="font-size: 0.85em; font-weight: 600;"><i class="fa-solid fa-user-tie"></i> {{ item[4] }}</span>
+                        </div>
+                        
+                        <h3 style="margin: 0; font-size: 1.2em;">{{ item[2] }}</h3>
+                        
+                        <!-- Fallback smartboard launcher -->
+                        <a href="{{ item[3] | replace('embed/', 'watch?v=') | replace('?rel=0&enablejsapi=1', '') }}" target="_blank" class="watch-btn">
+                            <i class="fa-brands fa-youtube"></i> Open in YouTube App / Tab
+                        </a>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div style="grid-column: 1 / -1; padding: 40px; text-align: center; color: #94a3b8;">
+                        <i class="fa-solid fa-chalkboard" style="font-size: 3em; margin-bottom: 15px; opacity: 0.5;"></i>
+                        <p style="margin: 0; font-size: 1.1em;">No video classes published yet.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

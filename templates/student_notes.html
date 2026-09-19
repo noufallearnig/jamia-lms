@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Notes - Jamia Imam Navavi-ra</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            background: linear-gradient(rgba(244, 247, 246, 0.92), rgba(235, 242, 250, 0.94)),
+                        url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat fixed;
+            padding: 30px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .container { max-width: 950px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+        .notes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+        .note-card {
+            background: white; border-radius: 14px; padding: 22px; box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+            border-top: 4px solid #10b981; text-align: left; display: flex; flex-direction: column; gap: 12px;
+        }
+        .subject-badge {
+            background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 6px; font-weight: 600; font-size: 0.78em; text-transform: uppercase; align-self: flex-start;
+        }
+        .note-card h3 { margin: 0; color: #1e293b; font-size: 1.15em; }
+        .btn-view {
+            background: #10b981; color: white !important; text-decoration: none; padding: 8px 14px; border-radius: 8px;
+            font-weight: 600; font-size: 0.88em; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .btn-view:hover { background: #059669 !important; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h1 style="font-size: 1.8em; margin: 0; color: #0f172a;">
+                    <i class="fa-solid fa-file-lines" style="color: #10b981;"></i> Subject Lecture Notes
+                </h1>
+                <p style="color: #64748b; font-size: 0.9em; margin-top: 4px;">Access and download lecture handouts distributed by faculty.</p>
+            </div>
+            <a href="{{ url_for('student_dashboard') }}" style="color: #2563eb; font-weight: 600; text-decoration: none;">&larr; Back to Portal</a>
+        </div>
+
+        <div class="notes-grid">
+            {% if notes %}
+                {% for note in notes %}
+                <div class="note-card">
+                    <span class="subject-badge">{{ note[1] }}</span>
+                    <h3>{{ note[2] }}</h3>
+                    <div style="font-size: 0.85em; color: #64748b; display: flex; align-items: center; gap: 6px;">
+                        <i class="fa-solid fa-user-tie"></i> Faculty: <strong>{{ note[4] }}</strong>
+                    </div>
+                    <a href="{{ url_for('uploaded_file', filename=note[3]) }}" target="_blank" class="btn-view" style="margin-top: 6px;">
+                        <i class="fa-solid fa-file-pdf"></i> Read / Download PDF
+                    </a>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div style="grid-column: 1 / -1; background: white; padding: 30px; border-radius: 12px; text-align: center; color: #94a3b8;">
+                    <i class="fa-solid fa-folder-open" style="font-size: 2.2em; margin-bottom: 8px; color: #cbd5e1;"></i>
+                    <p style="margin: 0;">No subject notes uploaded yet. Check back soon!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

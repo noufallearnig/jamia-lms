@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kithab Distribution Desk - Faculty</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=12.0">
+    <style>
+        /* =========================================================
+           ULTRA-PREMIUM LIGHT & DARK MODE FOR SUB-PAGES
+           ========================================================= */
+        body { 
+            margin: 0; padding: 40px;
+            background: #f3f6f9 !important; 
+            color: #1e293b; 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            min-height: 100vh;
+        }
+        
+        .container { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+        
+        .dash-wrapper { 
+            background: #ffffff !important; 
+            border: 1px solid #e9ecef !important; 
+            border-radius: 16px !important; 
+            padding: 32px; 
+            box-shadow: 0 4px 24px rgba(0,0,0,0.04) !important; 
+        }
+
+        .section-header { 
+            font-size: 15px; font-weight: 800; margin-bottom: 22px; display: flex; align-items: center; gap: 12px; 
+            letter-spacing: 0.8px; text-transform: uppercase; color: #1e293b !important;
+        }
+
+        .modern-input { width: 100%; background: transparent; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px 15px; color: #1e293b; font-family: inherit; font-size: 14px; margin-top: 6px; transition: all 0.3s; }
+        .modern-input:focus { outline: none; border-color: #10b981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1); }
+        
+        .btn-primary { background: linear-gradient(135deg, #10b981, #059669) !important; color: white !important; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; gap: 8px;}
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3); }
+
+        .btn-delete { background: #ef4444 !important; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: 0.85em;}
+        
+        /* Data Tables */
+        table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 15px;}
+        th { color: #64748b !important; text-align: left; padding: 16px; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #f1f5f9 !important; font-weight: 700; }
+        td { padding: 16px; border-bottom: 1px solid #f1f5f9 !important; font-size: 14px; color: #1e293b !important; font-weight: 500; }
+        tr:hover td { background: #f8fafc !important; }
+
+        /* Dark Mode Overrides */
+        body.dark-mode { background: #05080f !important; color: #f8fafc !important; }
+        body.dark-mode .dash-wrapper { background: #0f172a !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5) !important; }
+        body.dark-mode h1, body.dark-mode .section-header { color: #f8fafc !important; }
+        body.dark-mode p, body.dark-mode label { color: #94a3b8 !important; }
+        body.dark-mode .modern-input { border-color: rgba(255,255,255,0.1); color: #f8fafc; background: rgba(0,0,0,0.2); }
+        body.dark-mode th { border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important; }
+        body.dark-mode td { color: #e2e8f0 !important; border-bottom: 1px solid rgba(255, 255, 255, 0.03) !important; }
+        body.dark-mode tr:hover td { background: rgba(255, 255, 255, 0.02) !important; }
+    </style>
+</head>
+<body class="dark-mode">
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <div>
+                <h1 style="font-size: 2.2em; margin: 0; font-weight: 800;"><i class="fa-solid fa-book-bookmark" style="color: #10b981;"></i> Kithab Distribution Desk</h1>
+                <p style="margin-top: 6px; font-size: 15px;">Upload and manage PDF books for the student library.</p>
+            </div>
+            <a href="{{ url_for('teacher_dashboard') }}" style="color: #10b981; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+
+        <!-- Upload Form -->
+        <div class="dash-wrapper">
+            <div class="section-header"><i class="fa-solid fa-cloud-arrow-up" style="color: #10b981;"></i> Upload New Kithab (PDF)</div>
+            <form method="POST" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 20px;">
+                <div>
+                    <label style="font-size: 0.85em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Kithab / Book Title</label>
+                    <input type="text" name="title" required placeholder="e.g., Al-Arba'in An-Nawawiyyah" class="modern-input">
+                </div>
+                <div>
+                    <label style="font-size: 0.85em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Select PDF Document</label>
+                    <input type="file" name="pdf_file" accept=".pdf" required class="modern-input" style="padding: 9px 15px;">
+                </div>
+                <button type="submit" class="btn-primary" style="align-self: flex-start; margin-top: 10px;">
+                    <i class="fa-solid fa-upload"></i> Distribute to Students
+                </button>
+            </form>
+        </div>
+
+        <!-- Distributed Books List -->
+        <div class="dash-wrapper">
+            <div class="section-header"><i class="fa-solid fa-list-check" style="color: #10b981;"></i> Distributed Kithabs</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>File Access</th>
+                        <th style="width: 120px; text-align: center;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if kithabs %}
+                        {% for item in kithabs %}
+                        <tr>
+                            <td style="font-size: 16px;"><strong>{{ item[1] }}</strong></td>
+                            <td>
+                                <a href="{{ url_for('uploaded_file', filename=item[2]) }}" target="_blank" style="color: #38bdf8; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 600;">
+                                    <i class="fa-solid fa-file-pdf" style="color: #ef4444; font-size: 1.2em;"></i> View Document
+                                </a>
+                            </td>
+                            <td style="text-align: center;">
+                                <form action="{{ url_for('delete_kithab', kithab_id=item[0]) }}" method="POST" style="margin: 0;">
+                                    <button type="submit" class="btn-delete"><i class="fa-solid fa-trash"></i> Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="3" style="text-align: center; color: #94a3b8; padding: 30px;">
+                                <i class="fa-solid fa-folder-open" style="font-size: 2em; margin-bottom: 10px; opacity: 0.5;"></i><br>
+                                No books distributed yet.
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

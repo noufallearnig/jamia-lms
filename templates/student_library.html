@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kithab Library - Jamia Imam Navavi-ra</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            background: linear-gradient(rgba(244, 247, 246, 0.92), rgba(235, 242, 250, 0.94)),
+                        url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat fixed;
+            padding: 30px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .library-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+        }
+        .kithab-card {
+            background: white;
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+            border-top: 4px solid #8e44ad;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 160px;
+        }
+        .kithab-card h3 {
+            margin: 0 0 6px 0;
+            color: #1e293b;
+            font-size: 1.15em;
+        }
+        .btn-view {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: #8e44ad;
+            color: white !important;
+            padding: 9px 14px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9em;
+            margin-top: 14px;
+        }
+        .btn-view:hover {
+            background: #732d91 !important;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h1 style="font-size: 1.8em; margin: 0; color: #0f172a;"><i class="fa-solid fa-book-bookmark" style="color: #8e44ad;"></i> Kithab Library</h1>
+                <p style="color: #64748b; font-size: 0.9em; margin-top: 4px;">Digital texts and PDF volumes distributed by your teachers.</p>
+            </div>
+            <a href="{{ url_for('student_dashboard') }}" style="color: #2563eb; font-weight: 600; text-decoration: none;">&larr; Back to Portal</a>
+        </div>
+
+        <div class="library-grid">
+            {% if kithabs %}
+                {% for item in kithabs %}
+                <div class="kithab-card">
+                    <div>
+                        <h3>{{ item[1] }}</h3>
+                        <p style="font-size: 0.82em; color: #64748b; margin: 0;">
+                            <i class="fa-solid fa-user-tie"></i> Faculty: <strong>{{ item[2] }}</strong>
+                        </p>
+                    </div>
+                    <a href="{{ url_for('uploaded_file', filename=item[3]) }}" target="_blank" class="btn-view">
+                        <i class="fa-solid fa-file-pdf"></i> Read / Download PDF
+                    </a>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div style="grid-column: 1 / -1; background: white; padding: 30px; border-radius: 12px; text-align: center; color: #94a3b8;">
+                    <i class="fa-solid fa-book-open-reader" style="font-size: 2.2em; margin-bottom: 8px; color: #cbd5e1;"></i>
+                    <p style="margin: 0;">No PDF kithabs distributed yet. Check back after your faculty uploads them.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

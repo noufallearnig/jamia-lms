@@ -1,0 +1,368 @@
+/* ============================================================
+   JAMIA IMAM NAVAVI-RA LMS - MASTER SYSTEM STYLESHEET
+   ============================================================ */
+
+* {
+    box-sizing: border-box;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    background: #fdfbf5 !important;
+    color: #0f172a !important;
+    min-height: 100vh;
+}
+
+/* Sidebar text fix for Light Mode */
+[style*="1e293b"] *, [style*="0f172a"] * { color: #ffffff !important; }
+
+/* ============================================================
+   1. LIGHT MODE (WARM CREAM & TRANSLUCENT GLASS)
+   ============================================================ */
+body:not(.dark-mode) .card,
+body:not(.dark-mode) [class*="card"],
+body:not(.dark-mode) [class*="desk"],
+body:not(.dark-mode) [class*="panel"],
+body:not(.dark-mode) [class*="box"],
+body:not(.dark-mode) [class*="container"],
+body:not(.dark-mode) [style*="background: white"],
+body:not(.dark-mode) [style*="background-color: white"], 
+body:not(.dark-mode) [style*="background: #fff"],
+body:not(.dark-mode) [style*="background:#fff"], 
+body:not(.dark-mode) [style*="background: #ffffff"],
+body:not(.dark-mode) [style*="background:#ffffff"] {
+    background: rgba(255, 255, 255, 0.88) !important;
+    backdrop-filter: blur(12px) !important;
+    border-radius: 16px !important;
+    border: 1px solid rgba(203, 213, 225, 0.7) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05) !important;
+    color: #0f172a !important;
+}
+
+body:not(.dark-mode) button,
+body:not(.dark-mode) .btn,
+body:not(.dark-mode) .btn-action,
+body:not(.dark-mode) .btn-submit,
+body:not(.dark-mode) input[type="submit"] {
+    background: #2563eb !important;
+    color: #ffffff !important;
+    border-radius: 10px !important;
+    padding: 10px 18px !important;
+    font-weight: 600 !important;
+    border: none !important;
+    cursor: pointer !important;
+}
+
+/* ============================================================
+   2. DARK MODE MASTER CANVAS & OUTER CARDS
+   ============================================================ */
+html.dark-mode,
+body.dark-mode,
+body.dark-mode main,
+body.dark-mode .main-content,
+body.dark-mode .dashboard-container {
+    background: #0b0f17 !important;
+    background-color: #0b0f17 !important;
+}
+
+/* Main Outer Cards -> Control Panel Dark Blue + Dark Cream Border */
+body.dark-mode .card,
+body.dark-mode [class*="card"],
+body.dark-mode [class*="desk"],
+body.dark-mode [class*="panel"],
+body.dark-mode [class*="box"],
+body.dark-mode [class*="container"],
+body.dark-mode .auth-card {
+    background: #0f172a !important;
+    background-color: #0f172a !important;
+    border: 1.5px solid #C4B59D !important; /* Dark Cream Border */
+    border-radius: 16px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65) !important;
+}
+
+/* Sidebar Outline */
+body.dark-mode aside,
+body.dark-mode .sidebar {
+    border: 1.5px solid #C4B59D !important;
+    border-radius: 18px !important;
+}
+
+/* ============================================================
+   3. TABLE ROWS & ROSTER BOXES (NUKE INLINE WHITE STRIPES)
+   ============================================================ */
+/* Eliminates white backgrounds on rows, cards, or cells */
+body.dark-mode table,
+body.dark-mode thead,
+body.dark-mode tbody {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+/* Forces All Table Rows, Message Rows & List Items to Dark Slate */
+body.dark-mode tbody tr,
+body.dark-mode tr[style*="background"],
+body.dark-mode tr[style*="white"],
+body.dark-mode tr[style*="#fff"],
+body.dark-mode div[style*="background: white"]:not(.card),
+body.dark-mode div[style*="background-color: white"]:not(.card),
+body.dark-mode div[style*="background: #fff"]:not(.card),
+body.dark-mode div[style*="background:#fff"]:not(.card),
+body.dark-mode div[style*="background: #ffffff"]:not(.card),
+body.dark-mode div[style*="background:#ffffff"]:not(.card),
+body.dark-mode div[style*="rgb(255"]:not(.card) {
+    background: #1e293b !important;
+    background-color: #1e293b !important;
+    border: 1px solid #334155 !important;
+    border-radius: 10px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Neutralize Individual Cell Backgrounds */
+body.dark-mode td,
+body.dark-mode td[style*="background"] {
+    background: transparent !important;
+    background-color: transparent !important;
+    padding: 14px 18px !important;
+    border: none !important;
+}
+
+/* TEXT VISIBILITY: Crisp White Across All Data Rows */
+body.dark-mode tbody tr *,
+body.dark-mode tr[style*="background"] *,
+body.dark-mode td,
+body.dark-mode td *,
+body.dark-mode .message-text,
+body.dark-mode .announcement-text {
+    color: #ffffff !important;
+    text-shadow: none !important;
+    font-size: 0.92rem !important;
+    line-height: 1.5 !important;
+}
+
+/* Table Header Bars */
+body.dark-mode table thead th,
+body.dark-mode table tr:first-child th,
+body.dark-mode th {
+    background: #1e293b !important;
+    background-color: #1e293b !important;
+    border: none !important;
+    border-bottom: 2px solid #38bdf8 !important;
+    padding: 12px 18px !important;
+    font-size: 0.76rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 1px !important;
+    text-transform: uppercase !important;
+    color: #38bdf8 !important;
+}
+
+/* Status Badges (#5 Student ID, Role tags) */
+body.dark-mode .badge,
+body.dark-mode [class*="badge"],
+body.dark-mode [class*="tag"],
+body.dark-mode [class*="pill"],
+body.dark-mode td span[style*="background"] {
+    background: #0f172a !important;
+    color: #38bdf8 !important;
+    border: 1px solid #38bdf8 !important;
+    border-radius: 8px !important;
+    padding: 4px 10px !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    display: inline-block !important;
+}
+
+/* ============================================================
+   4. SHORTCUT DESK CARDS, INPUTS & BUTTONS
+   ============================================================ */
+/* Course Material Desk Tiles - UPGRADED PROFESSIONAL COLORS */
+body.dark-mode div[style*="grid"] > a,
+body.dark-mode div[style*="grid"] > div {
+    /* A deep, rich slate-blue fill that stands out from the dark panel */
+    background: linear-gradient(145deg, #162032, #1c273c) !important;
+    background-color: #1c273c !important;
+    border: 1px solid #2a344a !important;
+    border-radius: 12px !important;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Add distinct, professional colored top accents to each module */
+body.dark-mode div[style*="grid"] > a:nth-child(1) { border-top: 3px solid #00d2ff !important; } /* Cyan for Library */
+body.dark-mode div[style*="grid"] > a:nth-child(2) { border-top: 3px solid #8b5cf6 !important; } /* Purple for Classes */
+body.dark-mode div[style*="grid"] > a:nth-child(3) { border-top: 3px solid #f59e0b !important; } /* Gold for Notes */
+body.dark-mode div[style*="grid"] > a:nth-child(4) { border-top: 3px solid #10b981 !important; } /* Emerald for Tasks */
+body.dark-mode div[style*="grid"] > a:nth-child(n+5) { border-top: 3px solid #3b82f6 !important; } /* Blue for any extra cards */
+
+/* Premium Hover Effect */
+body.dark-mode div[style*="grid"] > a:hover {
+    background: linear-gradient(145deg, #1c273c, #233149) !important;
+    border-color: #38bdf8 !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4) !important;
+    transform: translateY(-4px) !important;
+}
+
+/* Inputs & Textareas */
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select {
+    background: #1e293b !important;
+    background-color: #1e293b !important;
+    color: #ffffff !important;
+    border: 1.5px solid #334155 !important;
+    border-radius: 10px !important;
+    padding: 12px 16px !important;
+    font-size: 0.92rem !important;
+    color-scheme: dark !important;
+}
+
+body.dark-mode input:focus,
+body.dark-mode textarea:focus {
+    outline: none !important;
+    border-color: #38bdf8 !important;
+    box-shadow: 0 0 14px rgba(56, 189, 248, 0.28) !important;
+}
+
+/* Post Message Button */
+body.dark-mode button[type="submit"],
+body.dark-mode .btn-submit,
+body.dark-mode form button,
+body.dark-mode .btn-primary {
+    background: #2563eb !important;
+    background-color: #2563eb !important;
+    color: #ffffff !important;
+    border: 1px solid #38bdf8 !important;
+    border-radius: 10px !important;
+    padding: 10px 22px !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4) !important;
+}
+
+body.dark-mode button[type="submit"]:hover,
+body.dark-mode .btn-submit:hover {
+    background: #1d4ed8 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(56, 189, 248, 0.6) !important;
+}
+
+/* Reset Password Button (Matches Cyan Badge Styling) */
+body.dark-mode .btn-reset,
+body.dark-mode .btn-warning,
+body.dark-mode button[class*="reset"],
+body.dark-mode a[href*="reset"] {
+    background: #0f172a !important; 
+    color: #38bdf8 !important;      
+    border: 1px solid #38bdf8 !important; 
+    border-radius: 8px !important;
+    padding: 7px 14px !important;
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+body.dark-mode .btn-reset:hover,
+body.dark-mode .btn-warning:hover,
+body.dark-mode button[class*="reset"]:hover,
+body.dark-mode a[href*="reset"]:hover {
+    background: rgba(56, 189, 248, 0.15) !important; 
+    color: #ffffff !important;
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.4) !important;
+}
+
+/* Delete Action Button */
+body.dark-mode .btn-delete,
+body.dark-mode button[class*="delete"],
+body.dark-mode a[href*="delete"],
+body.dark-mode a[href*="remove"] {
+    background: rgba(239, 68, 68, 0.18) !important;
+    border: 1px solid rgba(239, 68, 68, 0.5) !important;
+    color: #f87171 !important;
+    border-radius: 8px !important;
+    padding: 7px 14px !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+body.dark-mode .btn-delete:hover,
+body.dark-mode button[class*="delete"]:hover,
+body.dark-mode a[href*="delete"]:hover {
+    background: #ef4444 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.5) !important;
+}
+
+/* Global Headers & Metric Counter Numbers */
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode strong,
+body.dark-mode [style*="font-size: 2"],
+body.dark-mode [style*="font-size: 1.8"] {
+    color: #ffffff !important;
+}
+
+/* ============================================================
+   5. TOP-RIGHT THEME TOGGLE SWITCH
+   ============================================================ */
+#theme-slide-wrapper {
+    position: absolute;
+    top: 24px;
+    right: 32px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #ffffff;
+    padding: 6px 12px;
+    border-radius: 50px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border: 1px solid #cbd5e1;
+    cursor: pointer;
+    z-index: 99999;
+}
+
+body.dark-mode #theme-slide-wrapper {
+    background: #1e293b !important;
+    border-color: #C4B59D !important;
+}
+
+.toggle-icon-light { color: #f59e0b !important; font-size: 1.1em; }
+.toggle-icon-dark { color: #94a3b8 !important; font-size: 1.1em; }
+body.dark-mode .toggle-icon-light { color: #64748b !important; }
+body.dark-mode .toggle-icon-dark { color: #C4B59D !important; }
+
+#theme-slide-track {
+    width: 36px;
+    height: 20px;
+    background: #e2e8f0;
+    border-radius: 24px;
+    position: relative;
+    border: 1px solid transparent;
+}
+
+body.dark-mode #theme-slide-track {
+    background: #0f172a !important;
+    border-color: #C4B59D !important;
+}
+
+#theme-slide-thumb {
+    width: 14px;
+    height: 14px;
+    background: #2563eb;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+body.dark-mode #theme-slide-thumb {
+    transform: translateX(16px) !important;
+    background: #C4B59D !important;
+}

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress Reports - Faculty Desk</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body { margin: 0; padding: 40px; background: #05080f !important; color: #f8fafc; font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
+        .container { max-width: 950px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+        
+        .dash-wrapper { 
+            background: #0f172a !important; 
+            border: 1px solid rgba(255, 255, 255, 0.06) !important; 
+            border-radius: 16px !important; 
+            padding: 32px; 
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5) !important; 
+        }
+
+        .section-header { 
+            font-size: 15px; font-weight: 800; margin-bottom: 22px; display: flex; align-items: center; gap: 12px; 
+            letter-spacing: 0.8px; text-transform: uppercase; color: #f8fafc !important; 
+        }
+        
+        .modern-input { 
+            width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); 
+            border-radius: 8px; padding: 12px 15px; color: #f8fafc; font-size: 14px; margin-top: 6px; 
+        }
+        .modern-input:focus { outline: none; border-color: #10b981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1); }
+        
+        .btn-primary { 
+            background: linear-gradient(135deg, #10b981, #059669) !important; color: white !important; 
+            border: none; padding: 12px 25px; border-radius: 8px; font-weight: 600; cursor: pointer; 
+            display: inline-flex; align-items: center; gap: 8px; margin-top: 10px;
+        }
+        
+        .btn-delete { 
+            background: rgba(239, 68, 68, 0.12) !important; color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.25); 
+            padding: 6px 12px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: 0.85em;
+        }
+        .btn-delete:hover { background: #ef4444 !important; color: white; }
+        
+        table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 15px;}
+        th { color: #64748b !important; text-align: left; padding: 16px; font-size: 12px; text-transform: uppercase; border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important; font-weight: 700; }
+        td { padding: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.03) !important; font-size: 14px; color: #e2e8f0 !important; font-weight: 500; }
+        tr:hover td { background: rgba(255, 255, 255, 0.02) !important; }
+
+        label { color: #94a3b8 !important; }
+        
+        /* Flash Alerts */
+        .flash-box { display: flex; align-items: center; justify-content: space-between; padding: 12px 18px; border-radius: 10px; font-size: 0.9em; font-weight: 500; margin-bottom: 15px;}
+        .flash-success { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2); }
+        .flash-close { background: none; border: none; font-size: 1.3em; cursor: pointer; color: inherit; line-height: 1; }
+    </style>
+</head>
+<body class="dark-mode">
+    <div class="container">
+        <!-- Header -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <div>
+                <h1 style="font-size: 2.2em; margin: 0; font-weight: 800;"><i class="fa-solid fa-file-signature" style="color: #10b981;"></i> Student Progress Reports</h1>
+                <p style="margin-top: 6px; font-size: 15px; color: #94a3b8;">Write evaluations that parents can view in their portal.</p>
+            </div>
+            <a href="{{ url_for('teacher_dashboard') }}" style="color: #10b981; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-box flash-{{ category }}">
+                        <span><i class="fa-solid fa-circle-check"></i> {{ message }}</span>
+                        <button type="button" class="flash-close" onclick="this.parentElement.remove();">&times;</button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Create Report Form -->
+        <div class="dash-wrapper">
+            <div class="section-header"><i class="fa-solid fa-pen-nib" style="color: #10b981;"></i> Draft New Report</div>
+            <form method="POST" style="display: flex; flex-direction: column; gap: 20px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                    <div>
+                        <label style="font-size: 0.85em; font-weight: 700; text-transform: uppercase;">Select Student</label>
+                        <select name="student_id" required class="modern-input">
+                            <option value="" disabled selected>-- Choose Student --</option>
+                            {% for student in students %}
+                                <option value="{{ student[0] }}">{{ student[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label style="font-size: 0.85em; font-weight: 700; text-transform: uppercase;">Report Cycle</label>
+                        <select name="report_type" required class="modern-input">
+                            <option value="Weekly Report">Weekly Report</option>
+                            <option value="Monthly Report">Monthly Report</option>
+                            <option value="Yearly Report">Yearly Report</option>
+                            <option value="Special Note">Special Note</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label style="font-size: 0.85em; font-weight: 700; text-transform: uppercase;">Evaluation Details</label>
+                    <textarea name="content" rows="4" required placeholder="Write your feedback regarding the student's progress..." class="modern-input" style="resize: vertical;"></textarea>
+                </div>
+                <button type="submit" class="btn-primary" style="align-self: flex-start;">
+                    <i class="fa-solid fa-paper-plane"></i> Send to Parent Portal
+                </button>
+            </form>
+        </div>
+
+        <!-- History Table -->
+        <div class="dash-wrapper">
+            <div class="section-header"><i class="fa-solid fa-clock-rotate-left" style="color: #10b981;"></i> Your Report History</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Type</th>
+                        <th>Feedback Snippet</th>
+                        <th>Date</th>
+                        <th style="width: 100px; text-align: center;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if reports %}
+                        {% for report in reports %}
+                        <tr>
+                            <td><strong>{{ report[1] }}</strong></td>
+                            <td><span style="background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.85em;">{{ report[2] }}</span></td>
+                            <td>{{ report[3][:40] }}...</td>
+                            <td style="font-size: 0.85em; color: #94a3b8;">{{ report[4][:10] }}</td>
+                            <td style="text-align: center;">
+                                <form action="{{ url_for('delete_report', report_id=report[0]) }}" method="POST" style="margin: 0;">
+                                    <button type="submit" class="btn-delete"><i class="fa-solid fa-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="5" style="text-align: center; color: #94a3b8; padding: 30px;">You haven't written any progress reports yet.</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

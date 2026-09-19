@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parent Portal - Jamia Imam Navavi-ra</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Chart.js add cheyyunnu for digital diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { margin: 0; background: #05080f !important; color: #f8fafc; font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
+        
+        /* Top Navigation Bar */
+        .top-navbar {
+            background: #0f172a !important; border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 15px 40px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .logout-btn {
+            background: rgba(239, 68, 68, 0.12) !important; color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.25);
+            padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px;
+        }
+        
+        .container { max-width: 1100px; margin: 40px auto; display: flex; flex-direction: column; gap: 30px; padding: 0 20px;}
+        
+        .dash-wrapper { 
+            background: #0f172a !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; 
+            border-radius: 16px !important; padding: 32px; box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5) !important; 
+        }
+
+        .section-header { 
+            font-size: 16px; font-weight: 800; margin-bottom: 22px; display: flex; align-items: center; gap: 12px; 
+            letter-spacing: 0.8px; text-transform: uppercase; color: #f8fafc !important; 
+        }
+
+        /* Chart Container Styling */
+        .chart-container {
+            width: 100%; max-width: 350px; margin: 0 auto 30px auto;
+            background: rgba(255, 255, 255, 0.02); padding: 20px;
+            border-radius: 50%; border: 1px dashed rgba(255,255,255,0.05);
+        }
+
+        /* Homework Tables */
+        table { width: 100%; border-collapse: separate; border-spacing: 0; }
+        th { color: #64748b !important; text-align: left; padding: 12px; font-size: 12px; text-transform: uppercase; border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important; font-weight: 700; }
+        td { padding: 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.03) !important; font-size: 14px; color: #e2e8f0 !important; font-weight: 500; }
+        
+        .badge-done { background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; }
+        .badge-miss { background: rgba(239, 68, 68, 0.15); color: #ef4444; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; }
+
+        /* Report Cards */
+        .report-box {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 16px; border-radius: 12px; margin-bottom: 15px; border-left: 4px solid #8b5cf6;
+        }
+        .report-box h4 { margin: 0 0 8px 0; color: #c4b5fd; font-size: 15px;}
+        .report-box p { margin: 0; color: #94a3b8; font-size: 14px; line-height: 1.5; }
+
+        /* Form Inputs */
+        .modern-input { 
+            width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); 
+            border-radius: 8px; padding: 12px 15px; color: #f8fafc; font-size: 14px; margin-top: 6px; 
+        }
+        .modern-input:focus { outline: none; border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1); }
+        .btn-primary { 
+            background: linear-gradient(135deg, #38bdf8, #2563eb) !important; color: white !important; 
+            border: none; padding: 12px 25px; border-radius: 8px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; margin-top: 10px;
+        }
+
+        .flash-success { background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 12px; border-radius: 8px; margin-bottom: 15px; border: 1px solid rgba(16, 185, 129, 0.2); font-weight: 600;}
+    </style>
+</head>
+<body class="dark-mode">
+    
+    <div class="top-navbar">
+        <div>
+            <h2 style="margin: 0; font-size: 22px; font-weight: 800; letter-spacing: 1px;">JAMIA <span style="color: #38bdf8;">LMS</span></h2>
+            <small style="color: #94a3b8;">Parent Portal</small>
+        </div>
+        <a href="{{ url_for('logout') }}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Secure Log Out</a>
+    </div>
+
+    <div class="container">
+        
+        <div style="margin-bottom: -10px;">
+            <h1 style="font-size: 28px; margin: 0; font-weight: 800;">Welcome, Parent</h1>
+            <p style="color: #94a3b8; font-size: 16px; margin-top: 5px;">Monitor your child's live academic progress below.</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-success"><i class="fa-solid fa-circle-check"></i> {{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% if children_data %}
+            {% for child in children_data %}
+            
+            <div style="margin-top: 20px; border-bottom: 2px solid rgba(255,255,255,0.05); padding-bottom: 10px;">
+                <h2 style="color: #38bdf8; margin: 0;"><i class="fa-solid fa-user-graduate"></i> Student: {{ child.username | upper }}</h2>
+            </div>
+
+            <!-- LIVE HOMEWORK CHART TRACKER -->
+            <div class="dash-wrapper">
+                <div class="section-header"><i class="fa-solid fa-chart-pie" style="color: #38bdf8;"></i> Overall Performance Diagram</div>
+                
+                <!-- Digital Donut Chart Area -->
+                <div class="chart-container">
+                    <canvas id="progressChart_{{ child.id }}"></canvas>
+                </div>
+
+                <div style="text-align: center; font-size: 14px; color: #94a3b8; margin-bottom: 25px;">
+                    <strong>{{ child.completed_works }}</strong> Completed &nbsp; | &nbsp; <strong style="color:#ef4444;">{{ child.total_works - child.completed_works }}</strong> Missing out of {{ child.total_works }} Total Tasks
+                </div>
+
+                <!-- Homework Table -->
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Task Title</th>
+                                <th>Deadline</th>
+                                <th style="text-align: right;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if child.homeworks %}
+                                {% for hw in child.homeworks %}
+                                <tr>
+                                    <td><strong style="color: #94a3b8;">{{ hw[1] }}</strong></td>
+                                    <td>{{ hw[0] }}</td>
+                                    <td>{{ hw[2] }}</td>
+                                    <td style="text-align: right;">
+                                        {% if hw[3] %}
+                                            <span class="badge-done"><i class="fa-solid fa-check"></i> Submitted</span>
+                                        {% else %}
+                                            <span class="badge-miss"><i class="fa-solid fa-xmark"></i> Missing</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr><td colspan="4" style="text-align: center; color: #64748b; padding: 20px;">No assignments issued yet.</td></tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TEACHER REPORTS -->
+            <div class="dash-wrapper">
+                <div class="section-header"><i class="fa-solid fa-file-signature" style="color: #8b5cf6;"></i> Faculty Progress Reports</div>
+                {% if child.reports %}
+                    {% for rep in child.reports %}
+                    <div class="report-box">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <h4>{{ rep[0] }}</h4>
+                            <span style="font-size: 12px; color: #64748b;"><i class="fa-regular fa-calendar"></i> {{ rep[2][:10] }}</span>
+                        </div>
+                        <p>{{ rep[1] }}</p>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p style="color: #64748b; font-size: 14px; text-align: center;">No progress reports have been issued by teachers yet.</p>
+                {% endif %}
+            </div>
+
+            {% endfor %}
+        {% else %}
+            <div class="dash-wrapper" style="text-align: center; padding: 50px;">
+                <i class="fa-solid fa-link-slash" style="font-size: 3em; color: #64748b; margin-bottom: 15px;"></i>
+                <h3 style="margin: 0; color: #f8fafc;">No Students Linked</h3>
+                <p style="color: #94a3b8;">Please contact the Administrator to link your child's account to your profile.</p>
+            </div>
+        {% endif %}
+
+        <!-- FEEDBACK TO ADMIN FORM -->
+        {% if children_data %}
+        <div class="dash-wrapper">
+            <div class="section-header"><i class="fa-solid fa-envelope" style="color: #10b981;"></i> Message Administration / Faculty</div>
+            <form action="{{ url_for('submit_parent_feedback') }}" method="POST" style="display: flex; flex-direction: column; gap: 15px;">
+                
+                <div>
+                    <label style="font-size: 12px; font-weight: 700; text-transform: uppercase;">Select Child Regarding Feedback:</label>
+                    <select name="student_id" required class="modern-input" style="max-width: 300px;">
+                        <option value="" disabled selected>-- Choose Student --</option>
+                        {% for child in children_data %}
+                            <option value="{{ child.id }}">{{ child.username }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div>
+                    <label style="font-size: 12px; font-weight: 700; text-transform: uppercase;">Your Message:</label>
+                    <textarea name="message" rows="4" required placeholder="Write your questions or feedback here. Admin will review and forward to the correct faculty member..." class="modern-input" style="resize: vertical;"></textarea>
+                </div>
+                
+                <button type="submit" class="btn-primary" style="align-self: flex-start;">
+                    <i class="fa-solid fa-paper-plane"></i> Submit Feedback
+                </button>
+            </form>
+        </div>
+        {% endif %}
+
+    </div>
+
+    <!-- Script to render the Digital Charts automatically -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            {% for child in children_data %}
+                var ctx = document.getElementById('progressChart_{{ child.id }}').getContext('2d');
+                
+                var completed = {{ child.completed_works }};
+                var total = {{ child.total_works }};
+                var missing = total - completed;
+
+                // If no works are assigned yet, show a grey empty donut chart
+                if (total === 0) {
+                    new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['No Tasks Assigned'],
+                            datasets: [{
+                                data: [1],
+                                backgroundColor: ['#1e293b'],
+                                borderWidth: 0
+                            }]
+                        },
+                        options: { 
+                            cutout: '75%',
+                            plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8' } } } 
+                        }
+                    });
+                } else {
+                    // Show digital chart with Completed (Green) and Missing (Red) data
+                    new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Completed Works', 'Missing / Pending'],
+                            datasets: [{
+                                data: [completed, missing],
+                                backgroundColor: ['#10b981', '#ef4444'], // Green & Red
+                                borderWidth: 3,
+                                borderColor: '#0f172a',
+                                hoverOffset: 4
+                            }]
+                        },
+                        options: {
+                            cutout: '75%', // Makes it a donut shape
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: { color: '#f8fafc', font: { family: 'Segoe UI', size: 13 } }
+                                }
+                            }
+                        }
+                    });
+                }
+            {% endfor %}
+        });
+    </script>
+</body>
+</html>

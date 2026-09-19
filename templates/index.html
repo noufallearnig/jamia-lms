@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal - Jamia Imam Navavi-ra LMS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=17.0">
+    <style>
+        body, html {
+            margin: 0 !important;
+            padding: 0 !important;
+            height: 100% !important;
+            background: #05080f !important;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            overflow-x: hidden;
+        }
+
+        .landing-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 24px;
+            background: radial-gradient(circle at 50% 35%, #0f1d38 0%, #05080f 75%) !important;
+            box-sizing: border-box;
+        }
+
+        .landing-inner {
+            max-width: 820px;
+            width: 100%;
+            text-align: center;
+            padding: 40px 20px;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+
+        .splash-logo {
+            width: 150px;
+            height: auto;
+            margin-bottom: 25px;
+            filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.6));
+            transition: transform 0.3s ease;
+        }
+
+        .splash-logo:hover {
+            transform: scale(1.03);
+        }
+
+        .splash-kicker {
+            color: #d4af37;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+
+        .splash-title {
+            color: #ffffff !important;
+            font-size: 42px;
+            font-weight: 800;
+            line-height: 1.25;
+            letter-spacing: 1px;
+            margin: 0 0 22px 0;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+        }
+
+        .splash-desc {
+            color: #94a3b8 !important;
+            font-size: 17px;
+            line-height: 1.7;
+            max-width: 620px;
+            margin: 0 auto 40px auto;
+        }
+
+        .splash-btn {
+            background: linear-gradient(135deg, #c5a059, #9e7d3b) !important;
+            color: #ffffff !important;
+            text-decoration: none;
+            padding: 16px 44px;
+            border-radius: 50px;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(212, 175, 55, 0.3) !important;
+            box-shadow: 0 10px 30px rgba(188, 149, 91, 0.25);
+        }
+
+        .splash-btn:hover {
+            background: linear-gradient(135deg, #d4af37, #b38b42) !important;
+            transform: translateY(-3px);
+            box-shadow: 0 14px 35px rgba(212, 175, 55, 0.4);
+        }
+    </style>
+</head>
+<body class="dark-mode">
+    <div class="landing-wrap">
+        <div class="landing-inner">
+            <img src="{{ url_for('static', filename='JAMIA-IMAM-NAVAVI-RA_LOGO.png') }}" alt="Jamia Imam Navavi Logo" class="splash-logo">
+            <div class="splash-kicker">Jamia Imam Navavi (RA)</div>
+            <h1 class="splash-title">WHERE KNOWLEDGE TRANSCENDS BOUNDARIES</h1>
+            <p class="splash-desc">
+                Discover a sanctuary of learning where tradition embraces modernity, fostering leaders of faith, intellect, and innovation.
+            </p>
+            <a href="{{ url_for('login') }}" class="splash-btn">
+                <span>Go to Login Portal</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

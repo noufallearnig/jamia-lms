@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lecture Notes Desk - Faculty</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            background: linear-gradient(rgba(244, 247, 246, 0.92), rgba(235, 242, 250, 0.94)),
+                        url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat fixed;
+            padding: 30px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .container { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+        .card { background: white; padding: 24px; border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.06); border-top: 4px solid #10b981; text-align: left; }
+        .app-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9em; }
+        .app-table th { background: #1e293b; color: white; padding: 10px; text-align: left; }
+        .app-table td { padding: 10px; border-bottom: 1px solid #e2e8f0; }
+        .btn-delete { background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+        .btn-submit { background: #10b981; color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .flash-box { padding: 10px 14px; border-radius: 8px; font-size: 0.85em; font-weight: 500; display: flex; align-items: center; gap: 8px; }
+        .flash-success { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+        .flash-error { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h1 style="font-size: 1.8em; margin: 0; color: #0f172a;">
+                    <i class="fa-solid fa-file-lines" style="color: #10b981;"></i> Lecture Notes Desk
+                </h1>
+                <p style="color: #64748b; font-size: 0.9em; margin-top: 4px;">Upload subject handouts and chapter summaries for your students.</p>
+            </div>
+            <a href="{{ url_for('teacher_dashboard') }}" style="color: #2563eb; font-weight: 600; text-decoration: none;">&larr; Teacher Dashboard</a>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-box flash-{{ category }}">
+                        <i class="fa-solid {% if category == 'success' %}fa-circle-check{% else %}fa-circle-exclamation{% endif %}"></i>
+                        <span>{{ message }}</span>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Upload Form with multipart/form-data -->
+        <div class="card">
+            <h3><i class="fa-solid fa-file-arrow-up"></i> Upload New Note</h3>
+            <form method="POST" enctype="multipart/form-data" style="margin-top: 15px; display: flex; flex-direction: column; gap: 12px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div>
+                        <label style="font-size: 0.85em; font-weight: 600; color: #475569;">Subject</label>
+                        <input type="text" name="subject" required placeholder="e.g., Arabic Grammar" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; margin-top: 4px;">
+                    </div>
+                    <div>
+                        <label style="font-size: 0.85em; font-weight: 600; color: #475569;">Note Title</label>
+                        <input type="text" name="title" required placeholder="e.g., Chapter 3 Summary" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; margin-top: 4px;">
+                    </div>
+                </div>
+                <div>
+                    <label style="font-size: 0.85em; font-weight: 600; color: #475569;">Select PDF Document</label>
+                    <input type="file" name="note_pdf" accept=".pdf" required style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1; margin-top: 4px; background: white;">
+                </div>
+                <button type="submit" class="btn-submit" style="align-self: flex-start; margin-top: 6px;">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> Publish Note
+                </button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h3><i class="fa-solid fa-folder-open"></i> Uploaded Lecture Notes</h3>
+            <table class="app-table">
+                <thead>
+                    <tr><th>Subject</th><th>Note Title</th><th>PDF File</th><th style="width: 80px; text-align: center;">Action</th></tr>
+                </thead>
+                <tbody>
+                    {% if notes %}
+                        {% for n in notes %}
+                        <tr>
+                            <td><span style="background: #e0f2fe; color: #0369a1; padding: 3px 8px; border-radius: 6px; font-weight: 600; font-size: 0.85em;">{{ n[1] }}</span></td>
+                            <td><strong>{{ n[2] }}</strong></td>
+                            <td>
+                                <a href="{{ url_for('uploaded_file', filename=n[3]) }}" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: 500;">
+                                    <i class="fa-solid fa-file-pdf" style="color: #ef4444;"></i> View Document
+                                </a>
+                            </td>
+                            <td style="text-align: center;">
+                                <form action="{{ url_for('delete_note', note_id=n[0]) }}" method="POST" style="margin: 0;">
+                                    <button type="submit" class="btn-delete"><i class="fa-solid fa-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="4" style="text-align: center; color: #94a3b8; padding: 16px;">No notes uploaded yet.</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
