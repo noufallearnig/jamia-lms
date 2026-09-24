@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exams & Results - Faculty Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=16.0">
+    <style>
+        body { margin: 0; display: flex; background: #05080f !important; color: #f8fafc; font-family: 'Segoe UI', system-ui, sans-serif; height: 100vh; overflow: hidden; }
+        .side-nav-menu { width: 280px; background: #0b1121 !important; padding: 25px 20px; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; z-index: 10; }
+        .main-content { flex: 1; padding: 45px 55px; overflow-y: auto; background: radial-gradient(circle at top left, #0b1121, #05080f) !important; }
+        .nav-link { display: flex; align-items: center; gap: 12px; color: #94a3b8 !important; text-decoration: none; padding: 14px 18px; border-radius: 10px; margin-bottom: 6px; font-size: 14px; font-weight: 600; transition: all 0.3s ease; }
+        .nav-link i { font-size: 16px; opacity: 0.6; }
+        .nav-link:hover { background: rgba(255, 255, 255, 0.03) !important; color: #e2e8f0 !important; }
+        .nav-link.active { background: linear-gradient(135deg, #f43f5e, #e11d48) !important; color: #ffffff !important; }
+        .dash-wrapper { background: #0f172a !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; border-radius: 16px !important; padding: 32px; margin-bottom: 30px; }
+        .section-header { font-size: 14px; font-weight: 800; margin-bottom: 22px; display: flex; align-items: center; gap: 12px; letter-spacing: 0.8px; text-transform: uppercase; color: #f8fafc !important; }
+        .modern-input { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px 15px; color: #f8fafc; font-family: inherit; font-size: 14px; margin-bottom: 15px; }
+        .btn-primary { background: linear-gradient(135deg, #f43f5e, #e11d48) !important; color: white !important; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-block; }
+        table { width: 100%; border-collapse: separate; border-spacing: 0; }
+        th { color: #64748b !important; text-align: left; padding: 15px; font-size: 12px; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.05) !important; }
+        td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.03) !important; font-size: 14px; color: #e2e8f0 !important; vertical-align: middle; }
+    </style>
+</head>
+<body>
+    <div class="side-nav-menu">
+        <div style="text-align: center; margin-bottom: 45px; padding-top: 15px;">
+            <h2 style="margin: 0; font-size: 26px; font-weight: 800; letter-spacing: 1px;">JAMIA <span style="color: #10b981;">LMS</span></h2>
+        </div>
+        <a href="{{ url_for('teacher_dashboard') }}" class="nav-link"><i class="fas fa-chalkboard-teacher"></i> Dashboard</a>
+        <a href="{{ url_for('teacher_kithabs') }}" class="nav-link"><i class="fas fa-book-open"></i> Kithab Desk</a>
+        <a href="{{ url_for('teacher_classes') }}" class="nav-link"><i class="fas fa-video"></i> Class Sessions</a>
+        <a href="{{ url_for('teacher_notes') }}" class="nav-link"><i class="fas fa-pen-nib"></i> Lecture Notes</a>
+        <a href="{{ url_for('teacher_works') }}" class="nav-link"><i class="fas fa-tasks"></i> Homework Desk</a>
+        <a href="{{ url_for('teacher_exams') }}" class="nav-link active"><i class="fas fa-graduation-cap"></i> Exams & Results</a>
+    </div>
+
+    <main class="main-content">
+        <div style="margin-bottom: 30px;">
+            <h1 style="margin: 0; font-size: 32px; font-weight: 800;">Exams & Results Portal</h1>
+            <p style="margin: 8px 0 0 0; font-size: 16px; color: #94a3b8;">Provide external university links for exams and results.</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}{% for category, message in messages %}<div style="background: rgba(244,63,94,0.1); padding: 15px; color: #f43f5e; border: 1px solid #f43f5e; border-radius: 8px; margin-bottom: 20px;"><i class="fa-solid fa-circle-check"></i> {{ message }}</div>{% endfor %}{% endif %}
+        {% endwith %}
+
+        <div class="dash-wrapper">
+            <div class="section-header"><i class="fa-solid fa-link" style="color: #f43f5e;"></i> Publish Exam Portal Link</div>
+            <form action="{{ url_for('teacher_exams') }}" method="POST" style="display: flex; gap: 15px; align-items: flex-start;">
+                <div style="flex: 1;">
+                    <select name="semester_id" class="modern-input" required>
+                        <option value="" disabled selected>-- Select Semester --</option>
+                        <option value="0" style="color: #f43f5e; font-weight: bold;">Public (All Students)</option>
+                        {% for sem in semesters %}<option value="{{ sem[0] }}">{{ sem[1] }}</option>{% endfor %}
+                    </select>
+                    <input type="text" name="title" class="modern-input" placeholder="Title (e.g., Sem 1 Final Exam Login)" required>
+                </div>
+                <div style="flex: 2;">
+                    <input type="url" name="url" class="modern-input" placeholder="External Website URL (https://...)" required>
+                    <button type="submit" class="btn-primary"><i class="fa-solid fa-share-nodes"></i> Publish Link</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="dash-wrapper">
+            <div class="section-header"><i class="fa-solid fa-list"></i> Published Portals</div>
+            <table>
+                <thead><tr><th>Portal Title</th><th>Target Semester</th><th>External Link</th><th>Action</th></tr></thead>
+                <tbody>
+                    {% if links %}
+                        {% for l in links %}
+                        <tr>
+                            <td><strong>{{ l[1] }}</strong></td>
+                            <td><span style="background: rgba(244,63,94,0.1); color: #f43f5e; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: bold;">{% if l[6] %}{{ l[6] }}{% else %}All Students{% endif %}</span></td>
+                            <td><a href="{{ l[2] }}" target="_blank" style="color: #38bdf8; text-decoration: none;"><i class="fa-solid fa-external-link-alt"></i> Visit Portal</a></td>
+                            <td>
+                                <form action="{{ url_for('delete_exam', exam_id=l[0]) }}" method="POST" style="margin: 0;" onsubmit="return confirm('Remove this link?');">
+                                    <button type="submit" style="background: rgba(239,68,68,0.1); color: #ef4444; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;"><i class="fas fa-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="4" style="text-align: center; color: #64748b;">No external portals linked yet.</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html>

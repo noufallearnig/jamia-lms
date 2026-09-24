@@ -2,366 +2,122 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Works & Homework Desk - Faculty</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20.0">
+    <title>Works & Homework Desk - Faculty Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=17.0">
     <style>
-        /* =========================================================
-           1. DEFAULT & LIGHT THEME
-           ========================================================= */
-        body {
-            margin: 0;
-            padding: 40px;
-            background: #f3f6f9 !important;
-            color: #1e293b;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 1050px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-
-        .dash-wrapper {
-            background: #ffffff !important;
-            border: 1px solid #e9ecef !important;
-            border-radius: 16px !important;
-            padding: 32px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.04) !important;
-        }
-
-        .section-header {
-            font-size: 15px;
-            font-weight: 800;
-            margin-bottom: 22px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            letter-spacing: 0.8px;
-            text-transform: uppercase;
-            color: #1e293b !important;
-        }
-
-        .modern-input {
-            width: 100%;
-            box-sizing: border-box;
-            background: #ffffff;
-            border: 1px solid #cbd5e1;
-            border-radius: 10px;
-            padding: 12px 16px;
-            color: #1e293b;
-            font-family: inherit;
-            font-size: 14px;
-            margin-top: 6px;
-            transition: all 0.2s ease;
-        }
-
-        .modern-input:focus {
-            outline: none;
-            border-color: #10b981;
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 18px;
-        }
-
-        @media (max-width: 768px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #10b981, #059669) !important;
-            color: #ffffff !important;
-            border: none;
-            padding: 12px 26px;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.25s ease;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.25);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
-        }
-
-        .btn-view-subs {
-            background: rgba(37, 99, 235, 0.1);
-            color: #2563eb !important;
-            border: 1px solid rgba(37, 99, 235, 0.2);
-            text-decoration: none;
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s ease;
-        }
-
-        .btn-view-subs:hover {
-            background: #2563eb;
-            color: #ffffff !important;
-            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
-        }
-
-        .btn-delete {
-            background: rgba(239, 68, 68, 0.12);
-            border: 1px solid rgba(239, 68, 68, 0.25);
-            color: #ef4444;
-            padding: 8px 14px;
-            border-radius: 8px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-weight: 600;
-            font-size: 13px;
-            transition: all 0.2s ease;
-        }
-
-        .btn-delete:hover {
-            background: #ef4444;
-            color: #ffffff;
-            box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            margin-top: 10px;
-        }
-
-        th {
-            color: #64748b !important;
-            text-align: left;
-            padding: 16px;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-bottom: 2px solid #f1f5f9 !important;
-            font-weight: 700;
-        }
-
-        td {
-            padding: 16px;
-            border-bottom: 1px solid #f1f5f9 !important;
-            font-size: 14px;
-            color: #1e293b !important;
-            font-weight: 500;
-            vertical-align: middle;
-        }
-
-        tr:hover td {
-            background: #f8fafc !important;
-        }
-
-        .subject-badge {
-            background: rgba(56, 189, 248, 0.12);
-            color: #0284c7;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-weight: 700;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            display: inline-block;
-        }
-
-        /* =========================================================
-           2. DYNAMIC OVERRIDES: ULTRA-PREMIUM DARK MODE
-           ========================================================= */
-        body.dark-mode {
-            background: #05080f !important;
-            color: #f8fafc !important;
-        }
-
-        body.dark-mode .dash-wrapper {
-            background: #0f172a !important;
-            border: 1px solid rgba(255, 255, 255, 0.06) !important;
-            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5) !important;
-        }
-
-        body.dark-mode h1,
-        body.dark-mode .section-header {
-            color: #f8fafc !important;
-        }
-
-        body.dark-mode p,
-        body.dark-mode label,
-        body.dark-mode td {
-            color: #cbd5e1 !important;
-        }
-
-        body.dark-mode th {
-            color: #64748b !important;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
-        }
-
-        body.dark-mode td {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03) !important;
-        }
-
-        body.dark-mode tr:hover td {
-            background: rgba(255, 255, 255, 0.02) !important;
-        }
-
-        body.dark-mode .modern-input {
-            background: #1e293b !important;
-            border-color: #334155 !important;
-            color: #ffffff !important;
-            color-scheme: dark;
-        }
-
-        body.dark-mode .modern-input:focus {
-            border-color: #10b981 !important;
-            box-shadow: 0 0 14px rgba(16, 185, 129, 0.25) !important;
-        }
-
-        body.dark-mode .subject-badge {
-            background: rgba(56, 189, 248, 0.12) !important;
-            color: #38bdf8 !important;
-            border: 1px solid rgba(56, 189, 248, 0.25);
-        }
-
-        body.dark-mode .btn-view-subs {
-            background: rgba(56, 189, 248, 0.12);
-            color: #38bdf8 !important;
-            border-color: rgba(56, 189, 248, 0.25);
-        }
-
-        body.dark-mode .btn-view-subs:hover {
-            background: #0284c7;
-            color: #ffffff !important;
-            box-shadow: 0 4px 16px rgba(2, 132, 199, 0.35);
-        }
+        body { margin: 0; display: flex; background: #05080f !important; color: #f8fafc; font-family: 'Segoe UI', system-ui, sans-serif; height: 100vh; overflow: hidden; }
+        .side-nav-menu { width: 280px; background: #0b1121 !important; padding: 25px 20px; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; z-index: 10; }
+        .main-content { flex: 1; padding: 45px 55px; overflow-y: auto; background: radial-gradient(circle at top left, #0b1121, #05080f) !important; }
+        .nav-link { display: flex; align-items: center; gap: 12px; color: #94a3b8 !important; text-decoration: none; padding: 14px 18px; border-radius: 10px; margin-bottom: 6px; font-size: 14px; font-weight: 600; transition: all 0.3s ease; }
+        .nav-link i { font-size: 16px; opacity: 0.6; }
+        .nav-link:hover { background: rgba(255, 255, 255, 0.03) !important; color: #e2e8f0 !important; }
+        .nav-link.active { background: linear-gradient(135deg, #10b981, #059669) !important; color: #ffffff !important; }
+        .dash-wrapper { background: #0f172a !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; border-radius: 16px !important; padding: 32px; margin-bottom: 30px; }
+        .section-header { font-size: 14px; font-weight: 800; margin-bottom: 22px; display: flex; align-items: center; gap: 12px; letter-spacing: 0.8px; text-transform: uppercase; color: #f8fafc !important; }
+        .modern-input { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px 15px; color: #f8fafc; font-family: inherit; font-size: 14px; margin-bottom: 15px; }
+        .btn-primary { background: linear-gradient(135deg, #10b981, #059669) !important; color: white !important; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-block; }
+        table { width: 100%; border-collapse: separate; border-spacing: 0; }
+        th { color: #64748b !important; text-align: left; padding: 15px; font-size: 12px; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.05) !important; }
+        td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.03) !important; font-size: 14px; color: #e2e8f0 !important; vertical-align: middle; }
     </style>
 </head>
-<body class="dark-mode">
-    <div class="container">
-        
-        <!-- Header -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <div>
-                <h1 style="font-size: 2.2em; margin: 0; font-weight: 800;">
-                    <i class="fa-solid fa-list-check" style="color: #10b981;"></i> Works & Homework Desk
-                </h1>
-                <p style="margin-top: 6px; font-size: 15px;">Assign tasks, essays, and monitor student submissions.</p>
-            </div>
-            <a href="{{ url_for('teacher_dashboard') }}" style="color: #10b981; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 8px;">
-                <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
-            </a>
+<body>
+    <div class="side-nav-menu">
+        <div style="text-align: center; margin-bottom: 45px; padding-top: 15px;">
+            <h2 style="margin: 0; font-size: 26px; font-weight: 800; letter-spacing: 1px;">JAMIA <span style="color: #10b981;">LMS</span></h2>
+        </div>
+        <a href="{{ url_for('teacher_dashboard') }}" class="nav-link"><i class="fas fa-chalkboard-teacher"></i> Dashboard</a>
+        <a href="{{ url_for('teacher_kithabs') }}" class="nav-link"><i class="fas fa-book-open"></i> Kithab Desk</a>
+        <a href="{{ url_for('teacher_classes') }}" class="nav-link"><i class="fas fa-video"></i> Class Sessions</a>
+        <a href="{{ url_for('teacher_notes') }}" class="nav-link"><i class="fas fa-pen-nib"></i> Lecture Notes</a>
+        <a href="{{ url_for('teacher_works') }}" class="nav-link active"><i class="fas fa-tasks"></i> Homework Desk</a>
+        <a href="{{ url_for('teacher_exams') }}" class="nav-link"><i class="fas fa-graduation-cap"></i> Exams & Results</a>
+    </div>
+
+    <main class="main-content">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <h1 style="margin: 0; font-size: 32px; font-weight: 800;"><i class="fa-solid fa-list-check" style="color: #10b981;"></i> Works & Homework Desk</h1>
         </div>
 
-        <!-- Assignment Creation Form -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}{% for category, message in messages %}<div style="background: rgba(16,185,129,0.1); padding: 15px; color: #10b981; border: 1px solid #10b981; border-radius: 8px; margin-bottom: 20px;"><i class="fa-solid fa-circle-check"></i> {{ message }}</div>{% endfor %}{% endif %}
+        {% endwith %}
+
         <div class="dash-wrapper">
-            <div class="section-header">
-                <i class="fa-solid fa-circle-plus" style="color: #10b981;"></i> Create New Assignment
-            </div>
-            <form method="POST" action="{{ url_for('teacher_works') }}" style="display: flex; flex-direction: column; gap: 18px;">
-                <div class="form-grid">
-                    <div>
-                        <label style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;">Subject Name</label>
-                        <input type="text" name="subject" required placeholder="e.g., Fiqh, Nahw" class="modern-input">
+            <div class="section-header"><i class="fa-solid fa-plus-circle"></i> Create New Assignment</div>
+            <form action="{{ url_for('teacher_works') }}" method="POST">
+                <div style="display: flex; gap: 15px;">
+                    <div style="flex: 1;">
+                        <label style="font-size: 11px; color: #94a3b8; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; display: block;">Select Semester</label>
+                        <select name="semester_id" class="modern-input" required>
+                            <option value="" disabled selected>-- Select Semester --</option>
+                            <option value="0" style="color: #10b981; font-weight: bold;">Public (All Students)</option>
+                            {% for sem in semesters %}
+                                <option value="{{ sem[0] }}">{{ sem[1] }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
-                    <div>
-                        <label style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;">Assignment Title</label>
-                        <input type="text" name="title" required placeholder="e.g., Essay on Taharah" class="modern-input">
+                    <div style="flex: 1;">
+                        <label style="font-size: 11px; color: #94a3b8; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; display: block;">Subject Name</label>
+                        <input type="text" name="subject" class="modern-input" placeholder="e.g., Fiqh, Nahw..." required>
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="font-size: 11px; color: #94a3b8; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; display: block;">Assignment Title</label>
+                        <input type="text" name="title" class="modern-input" placeholder="e.g., Essay on Thareekh" required>
                     </div>
                 </div>
-
-                <div>
-                    <label style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;">Detailed Instructions</label>
-                    <textarea name="description" rows="3" required placeholder="Write clear submission instructions here..." class="modern-input" style="resize: vertical;"></textarea>
+                
+                <label style="font-size: 11px; color: #94a3b8; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; display: block;">Detailed Instructions</label>
+                <textarea name="description" class="modern-input" rows="3" placeholder="Write clear submission instructions here..." required></textarea>
+                
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <div style="flex: 1; max-width: 250px;">
+                        <label style="font-size: 11px; color: #94a3b8; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; display: block;">Due Date</label>
+                        <input type="date" name="due_date" class="modern-input" required style="margin-bottom: 0;">
+                    </div>
+                    <button type="submit" class="btn-primary" style="margin-top: 20px;"><i class="fa-solid fa-paper-plane"></i> Assign Homework</button>
                 </div>
-
-                <div>
-                    <label style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;">Due Date</label>
-                    <input type="date" name="due_date" required class="modern-input" style="max-width: 280px;">
-                </div>
-
-                <button type="submit" class="btn-primary" style="align-self: flex-start; margin-top: 6px;">
-                    <i class="fa-solid fa-paper-plane"></i> Assign Homework
-                </button>
             </form>
         </div>
 
-        <!-- Active Assignments Table -->
         <div class="dash-wrapper">
-            <div class="section-header">
-                <i class="fa-solid fa-layer-group" style="color: #10b981;"></i> Active Assignments & Submissions
-            </div>
-            <div style="overflow-x: auto;">
-                <table>
-                    <thead>
+            <div class="section-header"><i class="fa-solid fa-tasks"></i> Active Assignments & Submissions</div>
+            <table>
+                <thead><tr><th>Task Info</th><th>Semester</th><th>Due Date</th><th>Submissions</th><th>Action</th></tr></thead>
+                <tbody>
+                    {% if works %}
+                        {% for w in works %}
                         <tr>
-                            <th>Subject</th>
-                            <th>Assignment</th>
-                            <th>Deadline</th>
-                            <th>Submissions</th>
-                            <th style="width: 110px; text-align: center;">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% if works %}
-                            {% for item in works %}
-                            <tr>
-                                <td>
-                                    <span class="subject-badge">{{ item[1] }}</span>
-                                </td>
-                                <td>
-                                    <strong style="color: #f8fafc; font-size: 15px;">{{ item[2] }}</strong><br>
-                                    <span style="font-size: 13px; color: #94a3b8; display: inline-block; margin-top: 3px;">{{ item[3] }}</span>
-                                </td>
-                                <td>
-                                    <strong style="color: #ef4444; font-size: 13px; display: inline-flex; align-items: center; gap: 6px;">
-                                        <i class="fa-regular fa-calendar-xmark"></i> {{ item[4] }}
-                                    </strong>
-                                </td>
-                                <td>
-                                    <a href="{{ url_for('teacher_submissions', work_id=item[0]) }}" class="btn-view-subs">
-                                        <i class="fa-solid fa-folder-open"></i> Submissions ({{ item[5] }})
-                                    </a>
-                                </td>
-                                <td style="text-align: center;">
-                                    <form action="{{ url_for('delete_work', work_id=item[0]) }}" method="POST" style="margin: 0;">
-                                        <button type="submit" class="btn-delete">
-                                            <i class="fa-solid fa-trash"></i> Delete
-                                        </button>
+                            <td>
+                                <strong>{{ w[2] }}</strong><br>
+                                <span style="font-size: 12px; color: #94a3b8;">Subject: {{ w[1] }}</span>
+                            </td>
+                            <td>
+                                <span style="display: inline-block; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700;">
+                                    {% if w[8] %}{{ w[8] }}{% else %}All Students{% endif %}
+                                </span>
+                            </td>
+                            <td><span style="color: #f8fafc; font-size: 13px;"><i class="far fa-calendar-alt" style="color: #ef4444;"></i> {{ w[4] }}</span></td>
+                            <td>
+                                <span style="background: #334155; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold;">{{ w[6] }} Files</span>
+                            </td>
+                            <td>
+                                <div style="display: flex; gap: 8px;">
+                                    <a href="{{ url_for('teacher_submissions', work_id=w[0]) }}" class="btn-primary" style="padding: 6px 12px; font-size: 12px;"><i class="fa-solid fa-eye"></i> View & Grade</a>
+                                    <form action="{{ url_for('delete_work', work_id=w[0]) }}" method="POST" style="margin: 0;" onsubmit="return confirm('Delete this assignment permanently?');">
+                                        <button type="submit" style="background: rgba(239,68,68,0.1); color: #ef4444; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer;"><i class="fas fa-trash"></i></button>
                                     </form>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        {% else %}
-                            <tr>
-                                <td colspan="5" style="text-align: center; color: #94a3b8; padding: 36px;">
-                                    <i class="fa-solid fa-folder-open" style="font-size: 2.2em; margin-bottom: 12px; opacity: 0.5;"></i><br>
-                                    No homework assigned yet.
-                                </td>
-                            </tr>
-                        {% endif %}
-                    </tbody>
-                </table>
-            </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="5" style="text-align: center; color: #64748b;">No homework tasks assigned yet.</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
         </div>
-
-    </div>
+    </main>
 </body>
 </html>

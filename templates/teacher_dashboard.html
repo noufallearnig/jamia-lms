@@ -3,75 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teacher Portal - Jamia Imam Navavi-ra</title>
+    <title>Teacher Portal - Jamia LMS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=14.0">
-    
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=17.0">
     <style>
-        body { margin: 0; display: flex; background: #f3f6f9 !important; color: #1e293b; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; height: 100vh; overflow: hidden; }
-        .side-nav-menu { width: 280px; background: #ffffff !important; padding: 25px 20px; border: none !important; border-right: 1px solid #e9ecef !important; display: flex; flex-direction: column; box-shadow: 4px 0 24px rgba(0,0,0,0.02) !important; z-index: 10; }
-        .main-content { flex: 1; padding: 45px 55px; overflow-y: auto; background: #f3f6f9 !important; }
-        h1, h2, h4, .section-header { color: #0f172a !important; }
-        p, small { color: #475569 !important; }
-        .nav-link { display: flex; align-items: center; gap: 12px; color: #475569 !important; text-decoration: none; padding: 14px 18px; border-radius: 10px; margin-bottom: 6px; font-size: 14px; font-weight: 600; transition: all 0.3s ease; }
+        body { margin: 0; display: flex; background: #05080f !important; color: #f8fafc !important; font-family: 'Segoe UI', system-ui, sans-serif; height: 100vh; overflow: hidden; }
+        .side-nav-menu { width: 280px; background: #0b1121 !important; padding: 25px 20px; border-right: 1px solid rgba(255, 255, 255, 0.04) !important; display: flex; flex-direction: column; z-index: 10; }
+        .main-content { flex: 1; padding: 45px 55px; overflow-y: auto; background: radial-gradient(circle at top left, #0b1121, #05080f) !important; }
+        h1, h2, h4, .section-header { color: #f8fafc !important; }
+        p, small { color: #94a3b8 !important; }
+        .nav-link { display: flex; align-items: center; gap: 12px; color: #94a3b8 !important; text-decoration: none; padding: 14px 18px; border-radius: 10px; margin-bottom: 6px; font-size: 14px; font-weight: 600; transition: all 0.3s ease; }
         .nav-link i { font-size: 16px; opacity: 0.6; }
-        .nav-link:hover { background: #f1f5f9 !important; color: #0f172a !important; transform: translateX(4px); }
-        .nav-link.active { background: linear-gradient(135deg, #10b981, #059669) !important; color: #ffffff !important; box-shadow: 0 6px 20px rgba(16, 185, 129, 0.25) !important; }
+        .nav-link:hover { background: rgba(255, 255, 255, 0.03) !important; color: #e2e8f0 !important; transform: translateX(4px); }
+        .nav-link.active { background: linear-gradient(135deg, #10b981, #059669) !important; color: #ffffff !important; }
         .nav-link.active i { opacity: 1; color: #ffffff !important; }
-        .logout-btn { color: #ef4444 !important; background: transparent !important; justify-content: center; margin-top: 15px; border: 1px solid #fecaca !important; }
-        .logout-btn:hover { background: #ef4444 !important; color: #ffffff !important; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2) !important; }
-        .dash-wrapper { background: #ffffff !important; border: 1px solid #e9ecef !important; border-radius: 16px !important; padding: 32px; margin-bottom: 30px; box-shadow: 0 4px 24px rgba(0,0,0,0.04) !important; }
-        .section-header { font-size: 14px; font-weight: 800; margin-bottom: 22px; display: flex; align-items: center; gap: 12px; letter-spacing: 0.8px; text-transform: uppercase; color: #1e293b !important; }
-        .section-header i { color: #10b981 !important; font-size: 16px; }
+        .logout-btn { color: #ef4444 !important; justify-content: center; margin-top: 15px; border: 1px solid rgba(239, 68, 68, 0.1) !important; background: rgba(239, 68, 68, 0.05) !important;}
+        .dash-wrapper { background: #0f172a !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; border-radius: 16px !important; padding: 32px; margin-bottom: 30px; }
+        .section-header { font-size: 14px; font-weight: 800; margin-bottom: 22px; display: flex; align-items: center; gap: 12px; letter-spacing: 0.8px; text-transform: uppercase; }
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .stat-card { background: #ffffff !important; border: 1px solid #e9ecef !important; border-radius: 14px !important; padding: 20px; display: flex; align-items: center; gap: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.02) !important; }
+        .stat-card { background: #0f172a !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; border-radius: 14px !important; padding: 20px; display: flex; align-items: center; gap: 15px; }
         .stat-icon { width: 45px; height: 45px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
         .modules-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; }
-        .mod-item { background: #ffffff !important; border: 1px solid #e9ecef !important; border-radius: 14px !important; padding: 25px 20px; text-decoration: none; display: block; transition: all 0.3s ease; position: relative; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.02) !important; }
+        .mod-item { background: linear-gradient(145deg, #131e33, #1a2438) !important; border: 1px solid rgba(255, 255, 255, 0.05) !important; border-radius: 14px !important; padding: 25px 20px; text-decoration: none; display: block; transition: all 0.3s ease; position: relative; overflow: hidden; }
         .mod-item::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
-        .mod-library::before { background: #00d2ff; } 
-        .mod-classes::before { background: #8b5cf6; } 
-        .mod-notes::before   { background: #f59e0b; } 
-        .mod-works::before   { background: #10b981; } 
-        .mod-grading::before { background: #f43f5e; }
-        .mod-reports::before { background: #0ea5e9; }
-        .mod-item:hover { transform: translateY(-5px) !important; box-shadow: 0 16px 35px rgba(0,0,0,0.08) !important; border-color: #cbd5e1 !important; }
-        .mod-item h4 { margin: 0 0 10px 0; font-size: 15px; display: flex; align-items: center; gap: 8px; font-weight: 700;}
-        .mod-item p { margin: 0; font-size: 12px; line-height: 1.5; color: #64748b !important; }
+        .mod-library::before { background: #00d2ff; } .mod-classes::before { background: #8b5cf6; } .mod-notes::before { background: #f59e0b; } .mod-works::before { background: #10b981; } .mod-grading::before { background: #f43f5e; } .mod-reports::before { background: #0ea5e9; }
+        .mod-item:hover { transform: translateY(-5px); border-color: rgba(255, 255, 255, 0.15) !important; background: linear-gradient(145deg, #17243d, #1f2b42) !important;}
+        .mod-item h4 { margin: 0 0 10px 0; font-size: 15px; display: flex; align-items: center; gap: 8px; font-weight: 700; color: #f8fafc;}
         .two-col-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        @media (max-width: 1100px) { .two-col-grid { grid-template-columns: 1fr; } }
-        .modern-input { width: 100%; box-sizing: border-box; background: transparent; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px 15px; color: #1e293b; font-family: inherit; font-size: 14px; margin-bottom: 15px; transition: all 0.3s; }
-        .modern-input:focus { outline: none; border-color: #10b981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1); }
-        .btn-primary { background: linear-gradient(135deg, #10b981, #059669) !important; color: white !important; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3); }
-        .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626) !important; color: white !important; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
-        .notice-box { background: #f0f7ff !important; padding: 16px 20px; border-radius: 12px; border: 1px solid #cbe2ff !important; border-left: 4px solid #10b981 !important; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .modern-input { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px 15px; color: #f8fafc; font-family: inherit; font-size: 14px; margin-bottom: 15px; }
+        .btn-primary { background: linear-gradient(135deg, #10b981, #059669) !important; color: white !important; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626) !important; color: white !important; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .notice-box { background: rgba(16, 185, 129, 0.06) !important; padding: 16px 20px; border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.2) !important; border-left: 4px solid #10b981 !important; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
         table { width: 100%; border-collapse: separate; border-spacing: 0; }
-        th { color: #64748b !important; text-align: left; padding: 15px; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #f1f5f9 !important; font-weight: 700; }
-        td { padding: 15px; border-bottom: 1px solid #f1f5f9 !important; font-size: 14px; color: #1e293b !important; font-weight: 500; }
-        tr:hover td { background: #f8fafc !important; }
-        .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px; }
-
-        /* Dark Mode */
-        body.dark-mode { background: #05080f !important; color: #f8fafc !important; }
-        body.dark-mode .main-content { background: radial-gradient(circle at top left, #0b1121, #05080f) !important; }
-        body.dark-mode .side-nav-menu { background: #0b1121 !important; border-right: 1px solid rgba(255, 255, 255, 0.04) !important; box-shadow: 5px 0 25px rgba(0,0,0,0.2) !important; }
-        body.dark-mode h1, body.dark-mode h2, body.dark-mode h4, body.dark-mode .section-header { color: #f8fafc !important; }
-        body.dark-mode p, body.dark-mode small, body.dark-mode .nav-link { color: #94a3b8 !important; }
-        body.dark-mode .nav-link:hover { background: rgba(255, 255, 255, 0.03) !important; color: #e2e8f0 !important; }
-        body.dark-mode .nav-link.active { color: #ffffff !important; }
-        body.dark-mode .logout-btn { background: rgba(239, 68, 68, 0.05) !important; border-color: rgba(239, 68, 68, 0.1) !important; }
-        body.dark-mode .dash-wrapper, body.dark-mode .stat-card { background: #0f172a !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5) !important; }
-        body.dark-mode .section-header i { color: #10b981 !important; }
-        body.dark-mode .mod-item { background: linear-gradient(145deg, #131e33, #1a2438) !important; border: 1px solid rgba(255, 255, 255, 0.05) !important; box-shadow: none !important;}
-        body.dark-mode .mod-item:hover { background: linear-gradient(145deg, #17243d, #1f2b42) !important; border-color: rgba(255, 255, 255, 0.15) !important; }
-        body.dark-mode .mod-item p { color: #94a3b8 !important; }
-        body.dark-mode .modern-input { border-color: rgba(255,255,255,0.1); color: #f8fafc; background: rgba(0,0,0,0.2); }
-        body.dark-mode .notice-box { background: rgba(16, 185, 129, 0.06) !important; border: 1px solid rgba(16, 185, 129, 0.2) !important; }
-        body.dark-mode .notice-box p { color: #e2e8f0 !important; margin: 0;}
-        body.dark-mode th { border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important; }
-        body.dark-mode td { color: #e2e8f0 !important; border-bottom: 1px solid rgba(255, 255, 255, 0.03) !important; }
-        body.dark-mode tr:hover td { background: rgba(255, 255, 255, 0.02) !important; }
+        th { color: #64748b !important; text-align: left; padding: 15px; font-size: 12px; text-transform: uppercase; border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important; }
+        td { padding: 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.03) !important; font-size: 14px; color: #e2e8f0 !important; }
         .directive-box { background: rgba(139, 92, 246, 0.1); border-left: 4px solid #8b5cf6; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
     </style>
 </head>
@@ -80,38 +45,31 @@
     <div class="side-nav-menu">
         <div style="text-align: center; margin-bottom: 45px; padding-top: 15px;">
             <h2 style="margin: 0; font-size: 26px; font-weight: 800; letter-spacing: 1px;">JAMIA <span style="color: #10b981;">LMS</span></h2>
-            <small style="font-size: 13px; letter-spacing: 0.5px;">Imam Navavi-ra</small>
+            <small style="font-size: 13px; letter-spacing: 0.5px;">Faculty Control</small>
         </div>
-
-        <div style="font-size: 11px; font-weight: 800; margin-bottom: 15px; padding-left: 15px; letter-spacing: 1.5px; text-transform: uppercase; color: #94a3b8;">Faculty Control</div>
-        
         <a href="{{ url_for('teacher_dashboard') }}" class="nav-link active"><i class="fas fa-chalkboard-teacher"></i> Dashboard</a>
-        <a href="{{ url_for('teacher_kithabs') }}" class="nav-link"><i class="fas fa-book-open"></i> Kithab Desk <span style="margin-left:auto; font-size: 10px; color: #10b981;">Active</span></a>
-        <a href="{{ url_for('teacher_classes') }}" class="nav-link"><i class="fas fa-video"></i> Class Sessions <span style="margin-left:auto; font-size: 10px; color: #10b981;">Active</span></a>
+        <a href="{{ url_for('teacher_kithabs') }}" class="nav-link"><i class="fas fa-book-open"></i> Kithab Desk</a>
+        <a href="{{ url_for('teacher_classes') }}" class="nav-link"><i class="fas fa-video"></i> Class Sessions</a>
         <a href="{{ url_for('teacher_notes') }}" class="nav-link"><i class="fas fa-pen-nib"></i> Lecture Notes</a>
-        <a href="{{ url_for('teacher_works') }}" class="nav-link"><i class="fas fa-tasks"></i> Homework Desk <span style="margin-left:auto; font-size: 10px; color: #10b981;">Active</span></a>
-        <a href="{{ url_for('teacher_grades') }}" class="nav-link"><i class="fas fa-clipboard-check"></i> Grading Console <span style="margin-left:auto; font-size: 10px; color: #10b981;">Active</span></a>
-        <a href="{{ url_for('teacher_reports') }}" class="nav-link"><i class="fas fa-file-signature"></i> Progress Reports <span style="margin-left:auto; font-size: 10px; color: #0ea5e9;">New</span></a>
-
+        <a href="{{ url_for('teacher_works') }}" class="nav-link"><i class="fas fa-tasks"></i> Homework Desk</a>
+        <a href="{{ url_for('teacher_exams') }}" class="nav-link"><i class="fas fa-graduation-cap"></i> Exams & Results</a>
+        <a href="{{ url_for('teacher_reports') }}" class="nav-link"><i class="fas fa-file-signature"></i> Progress Reports</a>
         <div style="margin-top: auto;">
-            <a href="#" class="nav-link"><i class="fas fa-cog"></i> Settings</a>
             <a href="{{ url_for('logout') }}" class="nav-link logout-btn"><i class="fas fa-sign-out-alt"></i> Secure Log Out</a>
         </div>
     </div>
 
     <main class="main-content">
-        <div class="top-header">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px;">
             <div>
                 <h1 style="margin: 0; font-size: 32px; font-weight: 800;">Faculty Dashboard</h1>
-                <p style="margin: 8px 0 0 0; font-size: 16px;">Welcome back, <strong style="color: #10b981;">{{ session.username | default('noufal') }}</strong>. Manage your classroom below.</p>
+                <p style="margin: 8px 0 0 0; font-size: 16px;">Welcome back, <strong style="color: #10b981;">{{ session.username }}</strong>. Manage your classroom below.</p>
             </div>
         </div>
 
         {% if admin_directives %}
         <div class="dash-wrapper" style="border-left: 5px solid #8b5cf6 !important;">
-            <div class="section-header">
-                <i class="fa-solid fa-bullhorn" style="color: #8b5cf6;"></i> Directives from Administration
-            </div>
+            <div class="section-header"><i class="fa-solid fa-bullhorn" style="color: #8b5cf6;"></i> Directives from Administration</div>
             {% for msg in admin_directives %}
             <div class="directive-box">
                 <div style="font-size: 12px; color: #c4b5fd; font-weight: bold; margin-bottom: 5px;"><i class="fa-regular fa-clock"></i> Received: {{ msg[1][:10] }}</div>
@@ -123,72 +81,44 @@
 
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-                {% for category, message in messages %}
-                    <div class="notice-box" style="border-left-color: #10b981 !important; margin-bottom: 20px;">
-                        <p style="color: #10b981 !important; font-weight: 700;"><i class="fa-solid fa-circle-check"></i> {{ message }}</p>
-                    </div>
-                {% endfor %}
+                <div id="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="notice-box flash-auto-dismiss" style="border-left-color: #10b981 !important; margin-bottom: 10px;">
+                            <p style="color: #10b981 !important; font-weight: 700; margin: 0;"><i class="fa-solid fa-circle-check"></i> {{ message }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
             {% endif %}
         {% endwith %}
 
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981;"><i class="fas fa-user-graduate"></i></div>
-                <div>
-                    <h4 style="margin: 0; font-size: 20px; font-weight: 800;">{{ students|length }}</h4>
-                    <p style="margin: 0; font-size: 12px; text-transform: uppercase; font-weight: 600;">Enrolled Students</p>
-                </div>
+                <div><h4 style="margin: 0; font-size: 20px; font-weight: 800;">{{ students|length }}</h4><p style="margin: 0; font-size: 12px; text-transform: uppercase; font-weight: 600;">Enrolled Students</p></div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon" style="background: rgba(56, 189, 248, 0.1); color: #38bdf8;"><i class="fas fa-bullhorn"></i></div>
-                <div>
-                    <h4 style="margin: 0; font-size: 20px; font-weight: 800;">{{ announcements|length }}</h4>
-                    <p style="margin: 0; font-size: 12px; text-transform: uppercase; font-weight: 600;">Live Broadcasts</p>
-                </div>
+                <div><h4 style="margin: 0; font-size: 20px; font-weight: 800;">{{ announcements|length }}</h4><p style="margin: 0; font-size: 12px; text-transform: uppercase; font-weight: 600;">Live Broadcasts</p></div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;"><i class="fas fa-envelope-open-text"></i></div>
-                <div>
-                    <h4 style="margin: 0; font-size: 20px; font-weight: 800;">{{ feedbacks|length }}</h4>
-                    <p style="margin: 0; font-size: 12px; text-transform: uppercase; font-weight: 600;">Parent Messages</p>
-                </div>
+                <div><h4 style="margin: 0; font-size: 20px; font-weight: 800;">{{ feedbacks|length }}</h4><p style="margin: 0; font-size: 12px; text-transform: uppercase; font-weight: 600;">Parent Messages</p></div>
             </div>
         </div>
 
         <div class="dash-wrapper" style="padding-bottom: 40px;">
             <div class="section-header"><i class="fas fa-chalkboard"></i> Course Material Desks</div>
-            <p style="font-size: 14px; margin-top: -10px; color: #64748b;">Manage digital assets and assignments distributed to student portals.</p>
-            
             <div class="modules-grid">
-                <a href="{{ url_for('teacher_kithabs') }}" class="mod-item mod-library">
-                    <h4><i class="fas fa-book-open" style="color: #00d2ff;"></i> Kithab Distribution</h4>
-                    <p>Upload PDF kithabs and Islamic reference materials.</p>
-                </a>
-                <a href="{{ url_for('teacher_classes') }}" class="mod-item mod-classes">
-                    <h4><i class="fas fa-video" style="color: #8b5cf6;"></i> Class Sessions</h4>
-                    <p>Publish video lecture links, subject modules, and schedules.</p>
-                </a>
-                <a href="{{ url_for('teacher_notes') }}" class="mod-item mod-notes">
-                    <h4><i class="fas fa-pen-nib" style="color: #f59e0b;"></i> Notes Desk</h4>
-                    <p>Upload summaries, chapter outlines, and board notes.</p>
-                </a>
-                <a href="{{ url_for('teacher_works') }}" class="mod-item mod-works">
-                    <h4><i class="fas fa-tasks" style="color: #10b981;"></i> Works & Homework</h4>
-                    <p>Assign subject tasks, set deadlines, and review submissions.</p>
-                </a>
-                <a href="{{ url_for('teacher_grades') }}" class="mod-item mod-grading">
-                    <h4><i class="fas fa-clipboard-check" style="color: #f43f5e;"></i> Grading Console</h4>
-                    <p>Record marks and semester test scores directly into profiles.</p>
-                </a>
-                <a href="{{ url_for('teacher_reports') }}" class="mod-item mod-reports">
-                    <h4><i class="fas fa-file-signature" style="color: #0ea5e9;"></i> Progress Reports</h4>
-                    <p>Draft and publish student evaluations directly to parent portals.</p>
-                </a>
+                <a href="{{ url_for('teacher_kithabs') }}" class="mod-item mod-library"><h4><i class="fas fa-book-open" style="color: #00d2ff;"></i> Kithab Distribution</h4><p>Upload PDF kithabs and Islamic reference materials.</p></a>
+                <a href="{{ url_for('teacher_classes') }}" class="mod-item mod-classes"><h4><i class="fas fa-video" style="color: #8b5cf6;"></i> Class Sessions</h4><p>Publish video lecture links, subject modules, and schedules.</p></a>
+                <a href="{{ url_for('teacher_notes') }}" class="mod-item mod-notes"><h4><i class="fas fa-pen-nib" style="color: #f59e0b;"></i> Notes Desk</h4><p>Upload summaries, chapter outlines, and board notes.</p></a>
+                <a href="{{ url_for('teacher_works') }}" class="mod-item mod-works"><h4><i class="fas fa-tasks" style="color: #10b981;"></i> Works & Homework</h4><p>Assign subject tasks and assign grades to submissions.</p></a>
+                <a href="{{ url_for('teacher_exams') }}" class="mod-item mod-grading"><h4><i class="fas fa-graduation-cap" style="color: #f43f5e;"></i> Exams & Results</h4><p>Publish external university portal links for students.</p></a>
+                <a href="{{ url_for('teacher_reports') }}" class="mod-item mod-reports"><h4><i class="fas fa-file-signature" style="color: #0ea5e9;"></i> Progress Reports</h4><p>Draft and publish student evaluations directly to parent portals.</p></a>
             </div>
         </div>
 
         <div class="two-col-grid">
-            
             <div class="dash-wrapper" style="margin-bottom: 0;">
                 <div class="section-header"><i class="fas fa-satellite-dish"></i> Broadcast Announcement</div>
                 <form action="{{ url_for('post_announcement') }}" method="POST">
@@ -196,19 +126,22 @@
                     <button type="submit" class="btn-primary"><i class="fas fa-paper-plane" style="margin-right: 5px;"></i> Post Message</button>
                 </form>
 
-                <div style="margin-top: 25px;">
-                    <div style="font-size: 11px; font-weight: 800; color: #64748b; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid rgba(148, 163, 184, 0.2);">Live Messages</div>
+                <!-- NEW: SENT ANNOUNCEMENTS -->
+                <div style="margin-top: 25px; max-height: 250px; overflow-y: auto;">
+                    <div style="font-size: 11px; font-weight: 800; color: #64748b; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid rgba(148, 163, 184, 0.2);">My Broadcasts</div>
                     {% if announcements %}
                         {% for ann in announcements %}
-                        <div class="notice-box">
-                            <div>
-                                <strong style="font-size: 11px; color: #10b981;">{{ ann[1] }} &bull; {{ ann[3] }}</strong>
-                                <p style="font-size: 13px; margin: 4px 0 0 0;">{{ ann[2] }}</p>
+                            {% if ann[1] == session.username %}
+                            <div class="notice-box" style="align-items: flex-start;">
+                                <div>
+                                    <strong style="font-size: 11px; color: #10b981;">{{ ann[3][:10] }}</strong>
+                                    <p style="font-size: 13px; margin: 4px 0 0 0; color: #f8fafc;">{{ ann[2] }}</p>
+                                </div>
+                                <form action="{{ url_for('delete_announcement', ann_id=ann[0]) }}" method="POST" style="margin:0;" onsubmit="return confirm('Delete this announcement?');">
+                                    <button type="submit" style="background: rgba(239,68,68,0.1); color: #ef4444; border:none; padding: 6px 10px; border-radius: 6px; cursor: pointer;"><i class="fas fa-trash"></i></button>
+                                </form>
                             </div>
-                            <form action="{{ url_for('delete_announcement', ann_id=ann[0]) }}" method="POST" style="margin:0;">
-                                <button type="submit" style="background: rgba(239,68,68,0.1); color: #ef4444; border:none; padding: 8px 12px; border-radius: 6px; cursor: pointer;"><i class="fas fa-trash"></i></button>
-                            </form>
-                        </div>
+                            {% endif %}
                         {% endfor %}
                     {% else %}
                         <p style="color: #94a3b8; font-size: 13px;">No announcements posted yet.</p>
@@ -216,11 +149,8 @@
                 </div>
             </div>
 
-            <!-- Escalate to Administrator Form - DROPDOWN REMOVED -->
             <div class="dash-wrapper" style="margin-bottom: 0; border-top: 4px solid #ef4444 !important;">
                 <div class="section-header"><i class="fa-solid fa-triangle-exclamation" style="color: #ef4444;"></i> Escalate to Administrator</div>
-                <p style="font-size: 13px; color: #94a3b8; margin-top: -10px; margin-bottom: 15px;">Report issues, general complaints, or other concerns directly to the Master Admin.</p>
-                
                 <form action="{{ url_for('teacher_report_to_admin') }}" method="POST" style="display: flex; flex-direction: column; gap: 10px;">
                     <div>
                         <select name="report_type" required class="modern-input" style="width: 100%;">
@@ -235,23 +165,35 @@
                     <textarea name="message" class="modern-input" rows="3" required placeholder="Describe the issue or request in detail for the Admin..."></textarea>
                     <button type="submit" class="btn-danger" style="align-self: flex-start;"><i class="fa-solid fa-paper-plane" style="margin-right: 5px;"></i> Send Report</button>
                 </form>
+
+                <!-- NEW: SENT ESCALATIONS -->
+                <div style="margin-top: 25px; max-height: 250px; overflow-y: auto;">
+                    <div style="font-size: 11px; font-weight: 800; color: #64748b; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid rgba(148, 163, 184, 0.2);">My Escalations</div>
+                    {% if my_escalations %}
+                        {% for esc in my_escalations %}
+                        <div class="notice-box" style="border-left-color: #ef4444 !important; align-items: flex-start;">
+                            <div>
+                                <strong style="font-size: 11px; color: #ef4444;">{{ esc[3] }} &bull; {{ esc[6][:10] }}</strong>
+                                <p style="font-size: 13px; margin: 4px 0 0 0; color: #f8fafc;">{{ esc[4] }}</p>
+                                <span style="display: inline-block; margin-top: 5px; font-size: 10px; background: rgba(255,255,255,0.1); padding: 3px 6px; border-radius: 4px; color: #cbd5e1;">Status: {{ esc[5] }}</span>
+                            </div>
+                            <form action="{{ url_for('teacher_delete_escalation', report_id=esc[0]) }}" method="POST" style="margin:0;" onsubmit="return confirm('Delete this escalation?');">
+                                <button type="submit" style="background: rgba(239,68,68,0.1); color: #ef4444; border:none; padding: 6px 10px; border-radius: 6px; cursor: pointer;"><i class="fas fa-trash"></i></button>
+                            </form>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p style="color: #94a3b8; font-size: 13px;">No escalations sent yet.</p>
+                    {% endif %}
+                </div>
             </div>
         </div>
 
         <div class="dash-wrapper" style="margin-top: 30px; border-top: 4px solid #f59e0b !important;">
-            <div class="section-header">
-                <i class="fas fa-envelope-open-text" style="color: #f59e0b;"></i> Messages from Parents (Forwarded by Admin)
-            </div>
+            <div class="section-header"><i class="fas fa-envelope-open-text" style="color: #f59e0b;"></i> Messages from Parents (Forwarded by Admin)</div>
             <div style="overflow-x: auto;">
                 <table>
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Parent</th>
-                            <th>Regarding Student</th>
-                            <th>Message / Inquiry</th>
-                        </tr>
-                    </thead>
+                    <thead><tr><th>Date</th><th>Parent</th><th>Regarding Student</th><th>Message / Inquiry</th></tr></thead>
                     <tbody>
                         {% if feedbacks %}
                             {% for f in feedbacks %}
@@ -269,7 +211,13 @@
                 </table>
             </div>
         </div>
-
     </main>
+
+    <script>
+        setTimeout(() => {
+            const alerts = document.querySelectorAll('.flash-auto-dismiss');
+            alerts.forEach(alert => { alert.style.opacity = '0'; setTimeout(() => alert.remove(), 500); });
+        }, 3500);
+    </script>
 </body>
 </html>

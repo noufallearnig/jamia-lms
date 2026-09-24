@@ -2,105 +2,133 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Lecture Notes Desk - Faculty</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Lecture Notes - Faculty Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=17.0">
     <style>
-        body {
-            background: linear-gradient(rgba(244, 247, 246, 0.92), rgba(235, 242, 250, 0.94)),
-                        url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat fixed;
-            padding: 30px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .container { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
-        .card { background: white; padding: 24px; border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.06); border-top: 4px solid #10b981; text-align: left; }
-        .app-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9em; }
-        .app-table th { background: #1e293b; color: white; padding: 10px; text-align: left; }
-        .app-table td { padding: 10px; border-bottom: 1px solid #e2e8f0; }
-        .btn-delete { background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
-        .btn-submit { background: #10b981; color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; }
-        .flash-box { padding: 10px 14px; border-radius: 8px; font-size: 0.85em; font-weight: 500; display: flex; align-items: center; gap: 8px; }
-        .flash-success { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
-        .flash-error { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+        body { margin: 0; display: flex; background: #05080f !important; color: #f8fafc; font-family: 'Segoe UI', system-ui, sans-serif; height: 100vh; overflow: hidden; }
+        .side-nav-menu { width: 280px; background: #0b1121 !important; padding: 25px 20px; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; z-index: 10; }
+        .main-content { flex: 1; padding: 45px 55px; overflow-y: auto; background: radial-gradient(circle at top left, #0b1121, #05080f) !important; }
+        .nav-link { display: flex; align-items: center; gap: 12px; color: #94a3b8 !important; text-decoration: none; padding: 14px 18px; border-radius: 10px; margin-bottom: 6px; font-size: 14px; font-weight: 600; transition: all 0.3s ease; }
+        .nav-link i { font-size: 16px; opacity: 0.6; }
+        .nav-link:hover { background: rgba(255, 255, 255, 0.03) !important; color: #e2e8f0 !important; transform: translateX(4px); }
+        .nav-link.active { background: linear-gradient(135deg, #10b981, #059669) !important; color: #ffffff !important; }
+        .dash-wrapper { background: #0f172a !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; border-radius: 16px !important; padding: 32px; margin-bottom: 30px; }
+        .section-header { font-size: 14px; font-weight: 800; margin-bottom: 22px; display: flex; align-items: center; gap: 12px; letter-spacing: 0.8px; text-transform: uppercase; color: #f8fafc !important; }
+        .modern-input { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px 15px; color: #f8fafc; font-family: inherit; font-size: 14px; margin-bottom: 15px; }
+        .btn-primary { background: linear-gradient(135deg, #10b981, #059669) !important; color: white !important; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-block; }
+        table { width: 100%; border-collapse: separate; border-spacing: 0; }
+        th { color: #64748b !important; text-align: left; padding: 15px; font-size: 12px; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.05) !important; }
+        td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.03) !important; font-size: 14px; color: #e2e8f0 !important; }
+        .folder-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 20px; margin-top: 15px; }
+        .subject-folder-box { background: #1e293b !important; border: 1px solid #334155 !important; border-radius: 12px; padding: 25px 20px; text-align: center; text-decoration: none; transition: all 0.3s ease; display: block; position: relative; }
+        .subject-folder-box:hover { transform: translateY(-5px); border-color: #f59e0b !important; background: #0f172a !important; box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
+        .subject-folder-box i { font-size: 45px; color: #f59e0b !important; margin-bottom: 15px; display: block; }
+        .subject-folder-box h3 { margin: 0; font-size: 16px; color: #ffffff !important; font-weight: 700; text-transform: capitalize; }
+        .folder-delete-btn { position: absolute; top: 10px; right: 10px; background: #fee2e2 !important; color: #ef4444 !important; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; transition: 0.3s; z-index: 5; }
+        .folder-delete-btn:hover { background: #ef4444 !important; color: white !important; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div>
-                <h1 style="font-size: 1.8em; margin: 0; color: #0f172a;">
-                    <i class="fa-solid fa-file-lines" style="color: #10b981;"></i> Lecture Notes Desk
-                </h1>
-                <p style="color: #64748b; font-size: 0.9em; margin-top: 4px;">Upload subject handouts and chapter summaries for your students.</p>
+    <div class="side-nav-menu">
+        <div style="text-align: center; margin-bottom: 45px; padding-top: 15px;">
+            <h2 style="margin: 0; font-size: 26px; font-weight: 800; letter-spacing: 1px;">JAMIA <span style="color: #10b981;">LMS</span></h2>
+        </div>
+        <a href="{{ url_for('teacher_dashboard') }}" class="nav-link"><i class="fas fa-chalkboard-teacher"></i> Dashboard</a>
+        <a href="{{ url_for('teacher_kithabs') }}" class="nav-link"><i class="fas fa-book-open"></i> Kithab Desk</a>
+        <a href="{{ url_for('teacher_classes') }}" class="nav-link"><i class="fas fa-video"></i> Class Sessions</a>
+        <a href="{{ url_for('teacher_notes') }}" class="nav-link active"><i class="fas fa-pen-nib"></i> Lecture Notes</a>
+        <a href="{{ url_for('teacher_works') }}" class="nav-link"><i class="fas fa-tasks"></i> Homework Desk</a>
+        <a href="{{ url_for('teacher_exams') }}" class="nav-link"><i class="fas fa-graduation-cap"></i> Exams & Results</a>
+        <a href="{{ url_for('teacher_reports') }}" class="nav-link"><i class="fas fa-file-signature"></i> Progress Reports</a>
+    </div>
+
+    <main class="main-content">
+        {% if current_folder %}
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                <h1 style="margin: 0;"><i class="fa-solid fa-folder-open" style="color: #f59e0b;"></i> Subject: {{ current_folder[1] }}</h1>
+                <a href="{{ url_for('teacher_notes') }}" class="btn-primary" style="background: #334155 !important;"><i class="fa-solid fa-arrow-left"></i> Back to Folders</a>
             </div>
-            <a href="{{ url_for('teacher_dashboard') }}" style="color: #2563eb; font-weight: 600; text-decoration: none;">&larr; Teacher Dashboard</a>
-        </div>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="flash-box flash-{{ category }}">
-                        <i class="fa-solid {% if category == 'success' %}fa-circle-check{% else %}fa-circle-exclamation{% endif %}"></i>
-                        <span>{{ message }}</span>
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+            <div class="dash-wrapper">
+                <div class="section-header"><i class="fas fa-file-pdf"></i> Upload Note to '{{ current_folder[1] }}'</div>
+                <form action="{{ url_for('teacher_notes_inside', folder_id=current_folder[0]) }}" method="POST" enctype="multipart/form-data">
+                    <input type="text" name="title" class="modern-input" placeholder="Topic Name" required>
+                    <input type="file" name="note_pdf" class="modern-input" accept=".pdf" required>
+                    <button type="submit" class="btn-primary" style="background: linear-gradient(135deg, #f59e0b, #d97706) !important;"><i class="fas fa-upload"></i> Distribute Note</button>
+                </form>
+            </div>
 
-        <!-- Upload Form with multipart/form-data -->
-        <div class="card">
-            <h3><i class="fa-solid fa-file-arrow-up"></i> Upload New Note</h3>
-            <form method="POST" enctype="multipart/form-data" style="margin-top: 15px; display: flex; flex-direction: column; gap: 12px;">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                    <div>
-                        <label style="font-size: 0.85em; font-weight: 600; color: #475569;">Subject</label>
-                        <input type="text" name="subject" required placeholder="e.g., Arabic Grammar" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; margin-top: 4px;">
-                    </div>
-                    <div>
-                        <label style="font-size: 0.85em; font-weight: 600; color: #475569;">Note Title</label>
-                        <input type="text" name="title" required placeholder="e.g., Chapter 3 Summary" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; margin-top: 4px;">
-                    </div>
-                </div>
-                <div>
-                    <label style="font-size: 0.85em; font-weight: 600; color: #475569;">Select PDF Document</label>
-                    <input type="file" name="note_pdf" accept=".pdf" required style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1; margin-top: 4px; background: white;">
-                </div>
-                <button type="submit" class="btn-submit" style="align-self: flex-start; margin-top: 6px;">
-                    <i class="fa-solid fa-cloud-arrow-up"></i> Publish Note
-                </button>
-            </form>
-        </div>
+            <div class="dash-wrapper">
+                <div class="section-header"><i class="fas fa-copy"></i> Notes in this Folder</div>
+                <table>
+                    <thead><tr><th>Note Title</th><th>Document</th><th>Action</th></tr></thead>
+                    <tbody>
+                        {% if notes %}
+                            {% for n in notes %}
+                            <tr>
+                                <td><strong>{{ n[2] }}</strong></td>
+                                <td><a href="{{ url_for('uploaded_file', filename=n[3]) }}" target="_blank" style="color: #f59e0b; text-decoration: none;"><i class="fas fa-file-pdf"></i> {{ n[3][:20] }}...</a></td>
+                                <td>
+                                    <form action="{{ url_for('delete_note', note_id=n[0]) }}" method="POST" style="margin: 0;" onsubmit="return confirm('Delete this note?');">
+                                        <button type="submit" style="background: rgba(239,68,68,0.1); color: #ef4444; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;"><i class="fas fa-trash"></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr><td colspan="3" style="text-align: center; color: #64748b;">No notes in this folder yet.</td></tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
 
-        <div class="card">
-            <h3><i class="fa-solid fa-folder-open"></i> Uploaded Lecture Notes</h3>
-            <table class="app-table">
-                <thead>
-                    <tr><th>Subject</th><th>Note Title</th><th>PDF File</th><th style="width: 80px; text-align: center;">Action</th></tr>
-                </thead>
-                <tbody>
-                    {% if notes %}
-                        {% for n in notes %}
-                        <tr>
-                            <td><span style="background: #e0f2fe; color: #0369a1; padding: 3px 8px; border-radius: 6px; font-weight: 600; font-size: 0.85em;">{{ n[1] }}</span></td>
-                            <td><strong>{{ n[2] }}</strong></td>
-                            <td>
-                                <a href="{{ url_for('uploaded_file', filename=n[3]) }}" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: 500;">
-                                    <i class="fa-solid fa-file-pdf" style="color: #ef4444;"></i> View Document
+        {% else %}
+            <div style="margin-bottom: 30px;">
+                <h1 style="margin: 0; font-size: 32px; font-weight: 800;">Lecture Notes Desk</h1>
+                <p style="margin: 8px 0 0 0; font-size: 16px; color: #94a3b8;">Organize student notes using subject folders.</p>
+            </div>
+
+            <div class="dash-wrapper">
+                <div class="section-header"><i class="fa-solid fa-folder-plus"></i> Create New Notes Folder</div>
+                <form action="{{ url_for('create_folder') }}" method="POST" style="display: flex; gap: 15px; align-items: center;">
+                    <input type="hidden" name="module" value="notes">
+                    <select name="semester_id" class="modern-input" style="margin: 0; width: 250px;" required>
+                        <option value="" disabled selected>-- Select Semester --</option>
+                        <option value="0" style="color: #f59e0b; font-weight: bold;">Public (All Students)</option>
+                        {% for sem in semesters %}
+                            <option value="{{ sem[0] }}">{{ sem[1] }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="text" name="name" class="modern-input" placeholder="E.g., Math, Science..." required style="margin: 0; flex: 1;">
+                    <button type="submit" class="btn-primary" style="white-space: nowrap; background: linear-gradient(135deg, #f59e0b, #d97706) !important;"><i class="fa-solid fa-plus"></i> Create Folder</button>
+                </form>
+            </div>
+
+            <div class="dash-wrapper">
+                <div class="section-header"><i class="fa-solid fa-folders"></i> Your Note Folders</div>
+                <div class="folder-grid">
+                    {% if folders %}
+                        {% for f in folders %}
+                            <div style="position: relative;">
+                                <a href="{{ url_for('teacher_notes_inside', folder_id=f[0]) }}" class="subject-folder-box">
+                                    <i class="fa-solid fa-folder"></i>
+                                    <h3>{{ f[1] }}</h3>
+                                    <span style="display: inline-block; margin-top: 10px; background: rgba(245, 158, 11, 0.2); color: #f59e0b; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 700;">
+                                        {% if f[6] %}{{ f[6] }}{% else %}Public Folder{% endif %}
+                                    </span>
                                 </a>
-                            </td>
-                            <td style="text-align: center;">
-                                <form action="{{ url_for('delete_note', note_id=n[0]) }}" method="POST" style="margin: 0;">
-                                    <button type="submit" class="btn-delete"><i class="fa-solid fa-trash"></i></button>
+                                <form action="{{ url_for('delete_folder', folder_id=f[0]) }}" method="POST" onsubmit="return confirm('WARNING: Delete this folder and ALL notes inside it?');">
+                                    <button type="submit" class="folder-delete-btn"><i class="fa-solid fa-trash"></i></button>
                                 </form>
-                            </td>
-                        </tr>
+                            </div>
                         {% endfor %}
                     {% else %}
-                        <tr><td colspan="4" style="text-align: center; color: #94a3b8; padding: 16px;">No notes uploaded yet.</td></tr>
+                        <p style="color: #94a3b8; grid-column: 1 / -1;">No folders created yet.</p>
                     {% endif %}
-                </tbody>
-            </table>
-        </div>
-    </div>
+                </div>
+            </div>
+        {% endif %}
+    </main>
 </body>
 </html>
