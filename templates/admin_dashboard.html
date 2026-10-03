@@ -4,270 +4,290 @@
     <meta charset="UTF-8">
     <title>Admin Operations Console - Jamia LMS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background: linear-gradient(rgba(244, 247, 246, 0.92), rgba(235, 242, 250, 0.94)), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat fixed; padding: 30px; color: #1e293b; }
-        .container { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
-        .header-card { background: white; border-radius: 16px; padding: 22px 28px; box-shadow: 0 4px 16px rgba(0,0,0,0.06); display: flex; justify-content: space-between; align-items: center; border-left: 5px solid #2563eb; }
-        .card { background: white; padding: 24px; border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.06); text-align: left; }
-        .flash-box { display: flex; align-items: center; justify-content: space-between; padding: 12px 18px; border-radius: 10px; font-size: 0.9em; font-weight: 500; box-shadow: 0 4px 12px rgba(0,0,0,0.06); animation: slideDown 0.25s ease-out; margin-bottom: 10px; transition: opacity 0.5s ease; }
-        .flash-success { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
-        .flash-error { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
-        .flash-close { background: none; border: none; font-size: 1.3em; cursor: pointer; color: inherit; line-height: 1; }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
-        .app-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9em; }
-        .app-table th { background: #1e293b; color: white; padding: 12px; text-align: left; }
-        .app-table td { padding: 12px; border-bottom: 1px solid #e2e8f0; vertical-align: middle; background: white; }
-        .badge-role { padding: 3px 9px; border-radius: 6px; font-size: 0.8em; font-weight: 700; text-transform: uppercase; }
-        .role-admin { background: #fee2e2; color: #dc2626; }
-        .role-teacher { background: #dcfce7; color: #15803d; }
-        .role-student { background: #e0f2fe; color: #0284c7; }
-        .role-parent { background: #f3e8ff; color: #7e22ce; }
-        .type-badge { background: #fee2e2; color: #dc2626; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; }
-        .btn-action { border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 0.82em; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; text-decoration: none; }
-        .btn-delete { background: #fee2e2; color: #dc2626; }
-        .btn-delete:hover { background: #dc2626; color: white !important; }
-        .btn-primary { background: #2563eb; color: white !important; }
-        .btn-primary:hover { background: #1d4ed8 !important; }
-        .btn-success { background: #dcfce7; color: #15803d; }
-        .btn-success:hover { background: #16a34a; color: white; }
-        .btn-reset { background: #fef3c7; color: #b45309; }
-        .btn-reset:hover { background: #f59e0b; color: white !important; }
-        .role-select { padding: 5px 8px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 0.85em; background: white; }
-        .modern-input { width: 100%; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; font-family: inherit; font-size: 14px;}
-        .status-forwarded { background: #e0f2fe; color: #0369a1; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; }
-        .status-pending { background: #fef3c7; color: #b45309; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; }
+        /* THEME VARIABLES */
+        :root {
+            --bg-main: #f0f4f8;
+            --bg-card: #ffffff;
+            --bg-header: #ffffff;
+            --text-heading: #0f172a;
+            --text-body: #334155;
+            --text-muted: #64748b;
+            --border: rgba(0, 0, 0, 0.1);
+            --input-bg: #f8fafc;
+            --table-th: #e2e8f0;
+            --table-td-border: #e2e8f0;
+            --shadow: 0 4px 15px rgba(0,0,0,0.05);
+            --card-hover: rgba(0,0,0,0.02);
+            --toggle-bg: #e2e8f0;
+            --toggle-color: #0f172a;
+        }
+
+        body.dark-mode {
+            --bg-main: #05080f;
+            --bg-card: #0f172a;
+            --bg-header: linear-gradient(145deg, #131e33, #0f172a);
+            --text-heading: #f8fafc;
+            --text-body: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.05);
+            --input-bg: rgba(0,0,0,0.25);
+            --table-th: #1e293b;
+            --table-td-border: rgba(255,255,255,0.05);
+            --shadow: 0 10px 30px rgba(0,0,0,0.4);
+            --card-hover: rgba(255,255,255,0.03);
+            --toggle-bg: #1e293b;
+            --toggle-color: #f59e0b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; transition: background-color 0.3s, color 0.3s, border-color 0.3s; }
+        body { background: var(--bg-main); color: var(--text-body); padding: 30px; min-height: 100vh; }
+        
+        .container { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 25px; }
+        
+        /* Top Navigation & Theme Toggle */
+        .top-nav { display: flex; justify-content: flex-end; margin-bottom: -10px; }
+        .theme-toggle-btn { background: var(--toggle-bg); color: var(--toggle-color); border: none; padding: 10px 15px; border-radius: 20px; cursor: pointer; font-size: 14px; font-weight: bold; display: flex; align-items: center; gap: 8px; box-shadow: var(--shadow); }
+        .theme-toggle-btn:hover { opacity: 0.8; transform: translateY(-2px); }
+
+        /* Premium Card Design */
+        .card, .header-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 30px; box-shadow: var(--shadow); }
+        .header-card { display: flex; justify-content: space-between; align-items: center; background: var(--bg-header); border-left: 5px solid #0ea5e9; padding: 25px 35px; }
+        
+        h1, h3 { color: var(--text-heading); }
+        h3 { margin-bottom: 5px; font-size: 18px; display: flex; align-items: center; gap: 10px; }
+        p { color: var(--text-muted); font-size: 14px; }
+        
+        /* Modern Inputs & Buttons */
+        .modern-input, .role-select { width: 100%; padding: 12px 15px; background: var(--input-bg); border: 1px solid var(--border); border-radius: 10px; color: var(--text-heading); font-size: 14px; }
+        .modern-input:focus, .role-select:focus { outline: none; border-color: #0ea5e9; }
+        .role-select option { background: var(--bg-card); color: var(--text-heading); }
+        
+        .btn-action { border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-primary { background: linear-gradient(135deg, #0ea5e9, #0284c7); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 15px rgba(14, 165, 233, 0.3); }
+        .btn-delete { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }
+        .btn-delete:hover { background: #ef4444; color: white; transform: translateY(-2px); }
+        .btn-success { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2); }
+        .btn-success:hover { background: #10b981; color: white; }
+        .btn-reset { background: rgba(245, 158, 11, 0.1); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.2); }
+        .btn-reset:hover { background: #f59e0b; color: white; }
+        
+        /* Premium Tables */
+        .app-table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 15px; }
+        .app-table th { background: var(--table-th); color: var(--text-muted); padding: 15px; text-align: left; font-size: 12px; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; border-bottom: 1px solid var(--border); }
+        .app-table th:first-child { border-top-left-radius: 10px; }
+        .app-table th:last-child { border-top-right-radius: 10px; }
+        .app-table td { padding: 15px; border-bottom: 1px solid var(--table-td-border); vertical-align: middle; background: transparent; font-size: 14px; color: var(--text-body); }
+        
+        /* Badges */
+        .badge-role { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .role-admin { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+        .role-teacher { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+        .role-student { background: rgba(14, 165, 233, 0.15); color: #0ea5e9; }
+        .role-parent { background: rgba(168, 85, 247, 0.15); color: #a855f7; }
+        
+        /* Flash Messages */
+        .flash-box { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-radius: 12px; font-size: 14px; font-weight: 600; margin-bottom: 15px; }
+        .flash-success { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2); border-left: 4px solid #10b981; }
     </style>
 </head>
 <body>
     <div class="container">
         
+        <!-- THEME TOGGLE BUTTON -->
+        <div class="top-nav">
+            <button id="theme-toggle" class="theme-toggle-btn">
+                <i id="theme-icon" class="fa-solid fa-moon"></i> <span id="theme-text">Dark Mode</span>
+            </button>
+        </div>
+
+        <!-- HEADER -->
         <div class="header-card">
             <div>
-                <h1 style="font-size: 1.8em; margin: 0; color: #0f172a;"><i class="fa-solid fa-shield-halved" style="color: #2563eb;"></i> Administrator Operations</h1>
-                <p style="color: #64748b; font-size: 0.9em; margin-top: 4px;">Logged in as: <strong>{{ username }}</strong> (Master Admin)</p>
+                <h1 style="font-size: 1.8em; margin: 0;"><i class="fa-solid fa-shield-halved" style="color: #0ea5e9;"></i> Administrator Operations</h1>
+                <p style="margin-top: 5px;">Logged in as: <strong style="color: #0ea5e9; text-transform: uppercase;">{{ username }}</strong> (Master Admin)</p>
             </div>
-            <div style="display: flex; gap: 10px;">
-                <a href="{{ url_for('add_user') }}" class="btn-action btn-primary" style="padding: 8px 14px; font-size: 0.9em;"><i class="fa-solid fa-user-plus"></i> Create New Account</a>
-                <a href="{{ url_for('logout') }}" class="btn-action btn-delete" style="padding: 8px 14px; font-size: 0.9em;"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a>
+            <div style="display: flex; gap: 15px;">
+                <a href="{{ url_for('add_user') }}" class="btn-action btn-primary"><i class="fa-solid fa-user-plus"></i> Create Account</a>
+                <a href="{{ url_for('logout') }}" class="btn-action btn-delete"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a>
             </div>
         </div>
 
+        <!-- ALERTS -->
         <div id="flash-container">
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}
                         <div class="flash-box flash-{{ category }}">
                             <span><i class="fa-solid fa-circle-check"></i> {{ message }}</span>
-                            <button type="button" class="flash-close" onclick="this.parentElement.remove();">&times;</button>
                         </div>
                     {% endfor %}
                 {% endif %}
             {% endwith %}
         </div>
 
+        <!-- SEMESTERS -->
         <div class="card" style="border-top: 4px solid #f59e0b;">
-            <h3><i class="fa-solid fa-layer-group" style="color: #f59e0b;"></i> Academic Semesters Management</h3>
-            <form action="{{ url_for('admin_create_semester') }}" method="POST" style="margin-top: 15px; display: flex; gap: 10px; align-items: center;">
-                <input type="text" name="name" class="modern-input" placeholder="E.g., Semester 1, 1st Year BCA, Batch 2026..." required style="margin: 0; max-width: 400px;">
-                <button type="submit" class="btn-action btn-primary" style="padding: 10px 20px; background: #f59e0b;"><i class="fa-solid fa-plus"></i> Add Semester</button>
+            <h3><i class="fa-solid fa-layer-group" style="color: #f59e0b;"></i> Academic Semesters</h3>
+            <p>Create and manage semesters to organize students.</p>
+            <form action="{{ url_for('admin_create_semester') }}" method="POST" style="margin-top: 20px; display: flex; gap: 15px; align-items: center;">
+                <input type="text" name="name" class="modern-input" placeholder="E.g., Semester 1, 1st Year BCA..." required style="max-width: 400px; margin: 0;">
+                <button type="submit" class="btn-action" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: white;"><i class="fa-solid fa-plus"></i> Add Semester</button>
             </form>
-            <div style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+            <div style="margin-top: 25px; display: flex; gap: 15px; flex-wrap: wrap;">
                 {% if semesters %}
                     {% for sem in semesters %}
-                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 10px 15px; border-radius: 8px; display: flex; gap: 15px; align-items: center;">
-                            <strong style="color: #0f172a;">{{ sem[1] }}</strong>
-                            <form action="{{ url_for('admin_delete_semester', sem_id=sem[0]) }}" method="POST" style="margin: 0;" onsubmit="return confirm('Delete this semester? All students assigned to it will become Unassigned.');">
-                                <button type="submit" class="btn-action btn-delete" style="padding: 4px 8px; font-size: 11px;"><i class="fa-solid fa-trash"></i></button>
+                        <div style="background: var(--card-hover); border: 1px solid var(--border); padding: 10px 15px; border-radius: 10px; display: flex; gap: 15px; align-items: center;">
+                            <strong style="color: var(--text-heading);">{{ sem[1] }}</strong>
+                            <form action="{{ url_for('admin_delete_semester', sem_id=sem[0]) }}" method="POST" style="margin: 0;" onsubmit="return confirm('Delete this semester?');">
+                                <button type="submit" class="btn-action btn-delete" style="padding: 6px 10px;"><i class="fa-solid fa-trash"></i></button>
                             </form>
                         </div>
                     {% endfor %}
                 {% else %}
-                    <span style="color: #94a3b8; font-size: 0.9em;">No semesters created yet.</span>
+                    <span style="color: var(--text-muted); font-size: 0.9em;">No semesters created yet.</span>
                 {% endif %}
             </div>
         </div>
 
+        <!-- SYSTEM USERS -->
         <div class="card">
-            <h3><i class="fa-solid fa-users-gear"></i> System User Roster & Assignments</h3>
-            <table class="app-table">
-                <thead>
-                    <tr>
-                        <th style="width: 70px;">ID</th>
-                        <th>Username</th>
-                        <th>Role</th>
-                        <th>Semester (For Students)</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for u in users %}
-                    <tr>
-                        <td><strong>#{{ u[0] }}</strong></td>
-                        <td><strong>{{ u[1] }}</strong></td>
-                        <td><span class="badge-role role-{{ u[2] }}">{{ u[2] }}</span></td>
-                        <td>
-                            {% if u[2] == 'student' %}
-                                <form action="{{ url_for('admin_assign_semester', user_id=u[0]) }}" method="POST" style="display: flex; gap: 6px; margin: 0;">
-                                    <select name="semester_id" class="role-select" style="max-width: 150px;">
-                                        <option value="0" {% if u[3]|int == 0 %}selected{% endif %}>Unassigned</option>
-                                        {% for sem in semesters %}
-                                            <option value="{{ sem[0] }}" {% if u[3]|int == sem[0]|int %}selected{% endif %}>{{ sem[1] }}</option>
-                                        {% endfor %}
-                                    </select>
-                                    <button type="submit" class="btn-action btn-primary" title="Update Semester"><i class="fa-solid fa-floppy-disk"></i></button>
-                                </form>
-                            {% else %}
-                                <span style="color: #cbd5e1; font-size: 12px; font-style: italic;">N/A (Staff/Parent)</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            <div style="display: flex; gap: 5px; align-items: center;">
-                                <details style="position: relative;">
-                                    <summary class="btn-action btn-reset" style="cursor: pointer; list-style: none;" title="Reset Password">
-                                        <i class="fa-solid fa-key"></i>
-                                    </summary>
-                                    <form action="{{ url_for('admin_reset_password', user_id=u[0]) }}" method="POST" 
-                                          style="position: absolute; right: 0; top: 32px; background: white; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); z-index: 100; display: flex; flex-direction: column; gap: 8px; width: 210px;">
-                                        <span style="font-size: 0.8em; font-weight: bold; color: #475569;">New Password:</span>
-                                        <input type="password" name="new_password" required placeholder="Type new password" style="padding: 6px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85em;">
-                                        <button type="submit" class="btn-action btn-primary" style="justify-content: center;">Confirm</button>
+            <h3><i class="fa-solid fa-users-gear" style="color: #38bdf8;"></i> System User Roster</h3>
+            <div style="overflow-x: auto;">
+                <table class="app-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 70px;">ID</th>
+                            <th>Username</th>
+                            <th>Role</th>
+                            <th>Semester</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for u in users %}
+                        <tr>
+                            <td style="color: var(--text-muted);">#{{ u[0] }}</td>
+                            <td><strong style="color: var(--text-heading);">{{ u[1] }}</strong></td>
+                            <td><span class="badge-role role-{{ u[2] }}">{{ u[2] }}</span></td>
+                            <td>
+                                {% if u[2] == 'student' %}
+                                    <form action="{{ url_for('admin_assign_semester', user_id=u[0]) }}" method="POST" style="display: flex; gap: 10px; margin: 0;">
+                                        <select name="semester_id" class="role-select" style="max-width: 180px; padding: 8px;">
+                                            <option value="0" {% if u[3]|int == 0 %}selected{% endif %}>Unassigned</option>
+                                            {% for sem in semesters %}
+                                                <option value="{{ sem[0] }}" {% if u[3]|int == sem[0]|int %}selected{% endif %}>{{ sem[1] }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <button type="submit" class="btn-action btn-primary" style="padding: 8px 12px;" title="Update"><i class="fa-solid fa-floppy-disk"></i></button>
                                     </form>
-                                </details>
-
-                                {% if u[0] != current_user_id %}
-                                    <form action="{{ url_for('admin_delete_user', user_id=u[0]) }}" method="POST" style="margin: 0;" onsubmit="return confirm('Delete this user?');">
-                                        <button type="submit" class="btn-action btn-delete" title="Delete User"><i class="fa-solid fa-trash"></i></button>
-                                    </form>
+                                {% else %}
+                                    <span style="color: var(--text-muted); font-size: 12px; font-style: italic;">N/A (Staff/Parent)</span>
                                 {% endif %}
-                            </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                            </td>
+                            <td>
+                                <div style="display: flex; gap: 10px; align-items: center;">
+                                    <details style="position: relative;">
+                                        <summary class="btn-action btn-reset" style="cursor: pointer; list-style: none;" title="Reset Password"><i class="fa-solid fa-key"></i></summary>
+                                        <form action="{{ url_for('admin_reset_password', user_id=u[0]) }}" method="POST" 
+                                              style="position: absolute; right: 0; top: 38px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 100; display: flex; flex-direction: column; gap: 10px; width: 220px;">
+                                            <span style="font-size: 11px; font-weight: bold; color: var(--text-muted); text-transform: uppercase;">New Password:</span>
+                                            <input type="password" name="new_password" required class="modern-input" placeholder="Type password" style="padding: 8px;">
+                                            <button type="submit" class="btn-action btn-primary" style="justify-content: center;">Confirm</button>
+                                        </form>
+                                    </details>
+
+                                    {% if u[0] != current_user_id %}
+                                        <form action="{{ url_for('admin_delete_user', user_id=u[0]) }}" method="POST" style="margin: 0;" onsubmit="return confirm('Delete this user?');">
+                                            <button type="submit" class="btn-action btn-delete" title="Delete User"><i class="fa-solid fa-trash"></i></button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px;">
+            <!-- LINK PARENT -->
             <div class="card">
-                <h3><i class="fa-solid fa-link" style="color: #2563eb;"></i> Link Parent to Student</h3>
-                <form action="{{ url_for('admin_link_parent') }}" method="POST" style="margin-top: 15px; display: flex; flex-direction: column; gap: 10px;">
-                    <select name="parent_id" required class="role-select" style="width: 100%; padding: 10px;">
+                <h3><i class="fa-solid fa-link" style="color: #10b981;"></i> Link Parent to Student</h3>
+                <p>Connect accounts for progress tracking.</p>
+                <form action="{{ url_for('admin_link_parent') }}" method="POST" style="margin-top: 20px; display: flex; flex-direction: column; gap: 15px;">
+                    <select name="parent_id" required class="role-select">
                         <option value="" disabled selected>-- Choose Parent --</option>
-                        {% for u in users %}{% if u[2] == 'parent' %}<option value="{{ u[0] }}">{{ u[1] }} (ID #{{ u[0] }})</option>{% endif %}{% endfor %}
+                        {% for u in users %}{% if u[2] == 'parent' %}<option value="{{ u[0] }}">{{ u[1] }}</option>{% endif %}{% endfor %}
                     </select>
-                    <select name="student_id" required class="role-select" style="width: 100%; padding: 10px;">
+                    <select name="student_id" required class="role-select">
                         <option value="" disabled selected>-- Choose Student --</option>
-                        {% for u in users %}{% if u[2] == 'student' %}<option value="{{ u[0] }}">{{ u[1] }} (ID #{{ u[0] }})</option>{% endif %}{% endfor %}
+                        {% for u in users %}{% if u[2] == 'student' %}<option value="{{ u[0] }}">{{ u[1] }}</option>{% endif %}{% endfor %}
                     </select>
-                    <button type="submit" class="btn-action btn-primary" style="padding: 10px 20px; font-size: 0.9em; justify-content: center;"><i class="fa-solid fa-plus"></i> Connect Family</button>
+                    <button type="submit" class="btn-action" style="background: linear-gradient(135deg, #10b981, #059669); color: white; justify-content: center;"><i class="fa-solid fa-plus"></i> Connect Family</button>
                 </form>
             </div>
 
+            <!-- MESSAGE FACULTY -->
             <div class="card" style="border-top: 4px solid #8b5cf6;">
                 <h3><i class="fa-solid fa-bullhorn" style="color: #8b5cf6;"></i> Message Faculty</h3>
-                <form action="{{ url_for('admin_send_directive') }}" method="POST" style="margin-top: 15px; display: flex; flex-direction: column; gap: 10px;">
-                    <select name="teacher_id" required class="role-select" style="width: 100%; padding: 10px;">
+                <p>Send directives to teachers.</p>
+                <form action="{{ url_for('admin_send_directive') }}" method="POST" style="margin-top: 20px; display: flex; flex-direction: column; gap: 15px;">
+                    <select name="teacher_id" required class="role-select">
                         <option value="" disabled selected>-- Select Receiver --</option>
-                        <option value="0" style="font-weight: bold; color: #2563eb;">🔊 Broadcast to ALL Faculty</option>
-                        {% for t in teachers %}<option value="{{ t[0] }}">{{ t[1] }} (Direct Message)</option>{% endfor %}
+                        <option value="0" style="font-weight: bold; color: #0ea5e9;">🔊 Broadcast to ALL Faculty</option>
+                        {% for t in teachers %}<option value="{{ t[0] }}">{{ t[1] }}</option>{% endfor %}
                     </select>
-                    <textarea name="message" rows="3" required class="modern-input" placeholder="Type your directive or request here..."></textarea>
-                    <button type="submit" class="btn-action btn-primary" style="padding: 10px 20px; font-size: 0.9em; justify-content: center; background: #8b5cf6;"><i class="fa-solid fa-paper-plane"></i> Send Directive</button>
+                    <textarea name="message" rows="2" required class="modern-input" placeholder="Type directive here..."></textarea>
+                    <button type="submit" class="btn-action" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white; justify-content: center;"><i class="fa-solid fa-paper-plane"></i> Send Directive</button>
                 </form>
 
-                <!-- NEW: SENT DIRECTIVES LIST WITH DELETE -->
-                <div style="margin-top: 20px; max-height: 200px; overflow-y: auto;">
-                    <div style="font-size: 11px; font-weight: 800; color: #64748b; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; padding-bottom: 5px; border-bottom: 1px solid #cbd5e1;">Sent Directives</div>
+                <div style="margin-top: 20px; max-height: 150px; overflow-y: auto;">
+                    <div style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 5px;">Sent Directives</div>
                     {% if sent_admin_msgs %}
                         {% for msg in sent_admin_msgs %}
-                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div style="background: var(--card-hover); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: flex-start;">
                             <div>
-                                <strong style="font-size: 12px; color: #2563eb;">To: {{ msg[3] }}</strong> <span style="font-size: 10px; color: #94a3b8;">&bull; {{ msg[2][:10] }}</span>
-                                <p style="font-size: 13px; margin: 4px 0 0 0; color: #475569;">{{ msg[1] }}</p>
+                                <strong style="font-size: 12px; color: #8b5cf6;">To: {{ msg[3] }}</strong> <span style="font-size: 10px; color: var(--text-muted);">&bull; {{ msg[2][:10] }}</span>
+                                <p style="font-size: 13px; margin: 4px 0 0 0; color: var(--text-body);">{{ msg[1] }}</p>
                             </div>
-                            <form action="{{ url_for('admin_delete_directive', msg_id=msg[0]) }}" method="POST" style="margin: 0;" onsubmit="return confirm('Delete this sent directive?');">
+                            <form action="{{ url_for('admin_delete_directive', msg_id=msg[0]) }}" method="POST" style="margin: 0;" onsubmit="return confirm('Delete this directive?');">
                                 <button type="submit" style="background: transparent; color: #ef4444; border: none; cursor: pointer;"><i class="fa-solid fa-trash"></i></button>
                             </form>
                         </div>
                         {% endfor %}
                     {% else %}
-                        <p style="font-size: 12px; color: #94a3b8;">No directives sent yet.</p>
+                        <p style="font-size: 12px; color: var(--text-muted);">No directives sent yet.</p>
                     {% endif %}
                 </div>
-
             </div>
         </div>
 
+        <!-- ESCALATIONS -->
         <div class="card" style="border-top: 5px solid #ef4444;">
-            <h3><i class="fa-solid fa-triangle-exclamation" style="color: #ef4444;"></i> Faculty Escalations & Reports</h3>
+            <h3><i class="fa-solid fa-triangle-exclamation" style="color: #ef4444;"></i> Faculty Escalations</h3>
             <table class="app-table">
-                <thead>
-                    <tr><th>Date</th><th>Reporting Teacher</th><th>Regarding</th><th>Report Type</th><th>Details</th><th style="text-align: center;">Action</th></tr>
-                </thead>
+                <thead><tr><th>Date</th><th>Teacher</th><th>Regarding</th><th>Type</th><th>Details</th><th style="text-align: center;">Action</th></tr></thead>
                 <tbody>
                     {% if teacher_admin_reports %}
                         {% for r in teacher_admin_reports %}
                         <tr>
-                            <td style="font-size: 12px; color: #64748b;">{{ r[5][:10] }}</td>
-                            <td><strong style="color: #475569;"><i class="fa-solid fa-chalkboard-user"></i> {{ r[1] }}</strong></td>
-                            <td><strong style="color: #0284c7;">{% if r[2] %}{{ r[2] }}{% else %}General / Request{% endif %}</strong></td>
-                            <td><span class="type-badge">{{ r[3] }}</span></td>
-                            <td style="max-width: 250px; word-wrap: break-word; font-size: 13px;">{{ r[4] }}</td>
+                            <td style="color: var(--text-muted);">{{ r[5][:10] }}</td>
+                            <td><strong style="color: var(--text-heading);">{{ r[1] }}</strong></td>
+                            <td><strong style="color: #0ea5e9;">{% if r[2] %}{{ r[2] }}{% else %}General{% endif %}</strong></td>
+                            <td><span style="background: rgba(239,68,68,0.1); color: #ef4444; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: bold;">{{ r[3] }}</span></td>
+                            <td style="font-size: 13px; color: var(--text-body);">{{ r[4] }}</td>
                             <td style="text-align: center;">
                                 <form action="{{ url_for('admin_resolve_teacher_report', report_id=r[0]) }}" method="POST" style="margin: 0;">
-                                    <button type="submit" class="btn-action btn-success" style="font-size: 11px; padding: 4px 8px;"><i class="fa-solid fa-check"></i> Mark Resolved</button>
+                                    <button type="submit" class="btn-action btn-success"><i class="fa-solid fa-check"></i> Resolve</button>
                                 </form>
                             </td>
                         </tr>
                         {% endfor %}
                     {% else %}
-                        <tr><td colspan="6" style="text-align: center; color: #94a3b8; padding: 25px;">No escalations or reports from teachers.</td></tr>
-                    {% endif %}
-                </tbody>
-            </table>
-        </div>
-
-        <div class="card" style="border-top: 5px solid #10b981;">
-            <h3><i class="fa-solid fa-inbox" style="color: #10b981;"></i> Parent Feedback Inbox</h3>
-            <table class="app-table">
-                <thead>
-                    <tr><th>Parent</th><th>Student</th><th>Message</th><th>Status</th><th style="width: 220px; text-align: center;">Action / Forward</th></tr>
-                </thead>
-                <tbody>
-                    {% if feedbacks %}
-                        {% for f in feedbacks %}
-                        <tr>
-                            <td><strong style="color: #475569;"><i class="fa-solid fa-user-shield"></i> {{ f[1] }}</strong></td>
-                            <td><strong style="color: #0284c7;">{{ f[2] }}</strong></td>
-                            <td style="max-width: 250px; word-wrap: break-word; font-size: 13px;">{{ f[3] }}</td>
-                            <td>
-                                {% if 'Forwarded' in f[4] %}<span class="status-forwarded"><i class="fa-solid fa-share"></i> Forwarded</span>
-                                {% else %}<span class="status-pending"><i class="fa-solid fa-hourglass-half"></i> Needs Review</span>{% endif %}
-                            </td>
-                            <td>
-                                <div style="display: flex; gap: 8px; flex-direction: column;">
-                                    {% if 'Forwarded' not in f[4] %}
-                                        <form action="{{ url_for('admin_forward_feedback', feedback_id=f[0]) }}" method="POST" style="margin: 0; display: flex; gap: 4px;">
-                                            <select name="teacher_id" required class="role-select" style="padding: 4px; font-size: 11px;">
-                                                <option value="" disabled selected>-- Select Teacher --</option>
-                                                {% for t in teachers %}
-                                                    <option value="{{ t[0] }}">{{ t[1] }}</option>
-                                                {% endfor %}
-                                            </select>
-                                            <button type="submit" class="btn-action" style="background: #10b981; color: white;"><i class="fa-solid fa-paper-plane"></i></button>
-                                        </form>
-                                    {% endif %}
-                                    <form action="{{ url_for('admin_delete_feedback', feedback_id=f[0]) }}" method="POST" style="margin: 0; align-self: flex-end;">
-                                        <button type="submit" class="btn-action btn-delete" style="font-size: 11px; padding: 4px 8px;"><i class="fa-solid fa-trash"></i> Remove</button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    {% else %}
-                        <tr><td colspan="5" style="text-align: center; color: #94a3b8; padding: 25px;">No feedback received from parents yet.</td></tr>
+                        <tr><td colspan="6" style="text-align: center; color: var(--text-muted);">No escalations.</td></tr>
                     {% endif %}
                 </tbody>
             </table>
@@ -275,14 +295,40 @@
 
     </div>
 
-    <!-- AUTO DISMISS SCRIPT FOR FLASH MESSAGES -->
+    <!-- THEME SCRIPT -->
     <script>
+        // Check local storage for theme
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const themeText = document.getElementById('theme-text');
+        
+        // Load saved theme
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeIcon.className = 'fa-solid fa-sun';
+            themeText.textContent = 'Light Mode';
+        } else {
+            // Default to dark mode if first time, up to you. Let's make light default for now.
+        }
+
+        // Toggle Event
+        themeToggleBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark');
+                themeIcon.className = 'fa-solid fa-sun';
+                themeText.textContent = 'Light Mode';
+            } else {
+                localStorage.setItem('theme', 'light');
+                themeIcon.className = 'fa-solid fa-moon';
+                themeText.textContent = 'Dark Mode';
+            }
+        });
+
+        // Flash message dismiss
         setTimeout(() => {
             const alerts = document.querySelectorAll('.flash-box');
-            alerts.forEach(alert => {
-                alert.style.opacity = '0';
-                setTimeout(() => alert.remove(), 500);
-            });
+            alerts.forEach(alert => { alert.style.opacity = '0'; setTimeout(() => alert.remove(), 500); });
         }, 3500);
     </script>
 </body>

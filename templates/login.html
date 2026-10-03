@@ -3,201 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In - Jamia Imam Navavi-ra LMS</title>
+    <title>Sign In - Jamia Enterprise LMS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=18.0">
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-        }
-
-        body {
-            background: radial-gradient(circle at center, #0f1d38 0%, #05080f 85%) !important;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 24px;
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { 
+            background: radial-gradient(circle at top left, #0b1121, #05080f); 
+            height: 100vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
             color: #f8fafc;
         }
-
-        .login-card {
-            background: #0f172a !important;
-            border: 1px solid rgba(255, 255, 255, 0.08) !important;
-            border-radius: 20px !important;
-            padding: 42px 36px;
+        .login-wrapper {
+            background: linear-gradient(145deg, #131e33, #0f172a);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 40px;
             width: 100%;
             max-width: 420px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6) !important;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
-
-        /* High-Definition Institutional Logo */
-        .login-logo {
-            width: 90px;
-            height: auto;
-            margin: 0 auto 16px auto;
-            display: block;
-            filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.65));
-            image-rendering: -webkit-optimize-contrast;
-            image-rendering: crisp-edges;
-            transition: transform 0.25s ease;
+        .login-wrapper::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, #10b981, #0ea5e9);
         }
-
-        .login-logo:hover {
-            transform: scale(1.05);
+        /* Updated Logo CSS */
+        .logo-area img { 
+            width: 85px; /* Adjust size based on your logo */
+            height: auto; 
+            margin-bottom: 15px; 
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); /* Adds a premium soft shadow to the logo */
         }
-
-        .login-card h2 {
-            color: #ffffff !important;
-            font-size: 24px;
-            font-weight: 800;
-            letter-spacing: 0.5px;
+        .logo-area h1 { font-size: 24px; font-weight: 800; margin-bottom: 5px; letter-spacing: 1px; }
+        .logo-area p { color: #94a3b8; font-size: 14px; margin-bottom: 30px; }
+        
+        .input-group { text-align: left; margin-bottom: 20px; }
+        .input-group label { display: block; font-size: 12px; color: #94a3b8; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; }
+        .modern-input {
+            width: 100%; padding: 14px 15px;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px; color: #f8fafc; font-size: 15px;
+            transition: all 0.3s ease;
         }
-
-        .login-card p {
-            color: #94a3b8 !important;
-            font-size: 14px;
-            margin-top: 4px;
+        .modern-input:focus { outline: none; border-color: #0ea5e9; box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2); background: rgba(0, 0, 0, 0.4); }
+        
+        .btn-login {
+            width: 100%; padding: 14px;
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+            color: white; border: none; border-radius: 10px;
+            font-size: 15px; font-weight: 700; cursor: pointer;
+            transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px;
+            margin-top: 10px;
         }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            text-align: left;
-        }
-
-        .form-group label {
-            font-size: 12px;
-            font-weight: 700;
-            color: #94a3b8;
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 13px 15px;
-            border-radius: 10px;
-            background: #1e293b !important;
-            border: 1.5px solid #334155 !important;
-            color: #ffffff !important;
-            font-size: 15px;
-            outline: none;
-            transition: all 0.2s ease;
-        }
-
-        .form-group input:focus {
-            border-color: #38bdf8 !important;
-            box-shadow: 0 0 14px rgba(56, 189, 248, 0.25) !important;
-        }
-
-        .btn-submit {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
-            color: #ffffff !important;
-            border: none;
-            padding: 14px;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.25s ease;
-            box-shadow: 0 4px 18px rgba(37, 99, 235, 0.35);
-        }
-
-        .btn-submit:hover {
-            background: linear-gradient(135deg, #1d4ed8, #1e40af) !important;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 22px rgba(37, 99, 235, 0.5);
-        }
-
-        .flash-box {
-            padding: 12px 14px;
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: 600;
-            text-align: left;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+        .btn-login:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(14, 165, 233, 0.3); }
+        
         .flash-error {
-            background: rgba(239, 68, 68, 0.15) !important;
-            color: #fca5a5 !important;
-            border: 1px solid rgba(239, 68, 68, 0.35) !important;
-        }
-        .flash-success {
-            background: rgba(16, 185, 129, 0.15) !important;
-            color: #86efac !important;
-            border: 1px solid rgba(16, 185, 129, 0.35) !important;
-        }
-
-        .back-link {
-            color: #64748b;
-            font-size: 13px;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            transition: color 0.2s;
-        }
-
-        .back-link:hover {
-            color: #94a3b8;
+            background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444; padding: 12px; border-radius: 8px; font-size: 13px; font-weight: 600;
+            margin-bottom: 20px; display: flex; align-items: center; gap: 8px; justify-content: center;
         }
     </style>
 </head>
-<body class="dark-mode">
-    <div class="login-card">
-        <div>
-            <img src="{{ url_for('static', filename='JAMIA-IMAM-NAVAVI-RA_LOGO.png') }}" alt="Jamia Imam Navavi Logo" class="login-logo">
-            <h2>Sign In to LMS</h2>
-            <p>Jamia Imam Navavi-ra Central Portal</p>
+<body>
+
+    <div class="login-wrapper">
+        <div class="logo-area">
+            <!-- Fetching your specific logo from the static folder -->
+            <img src="{{ url_for('static', filename='JAMIA-IMAM-NAVAVI-RA_LOGO.png') }}" alt="Jamia LMS Logo">
+            <h1>JAMIA LMS</h1>
+            <p>Enterprise Faculty & Student Portal</p>
         </div>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
-                    <div class="flash-box flash-{{ category }}">
-                        <i class="fa-solid {% if category == 'success' %}fa-circle-check{% else %}fa-circle-exclamation{% endif %}"></i>
-                        <span>{{ message }}</span>
-                    </div>
+                    <div class="flash-error"><i class="fa-solid fa-circle-exclamation"></i> {{ message }}</div>
                 {% endfor %}
             {% endif %}
         {% endwith %}
 
-        <form method="POST" action="{{ url_for('login') }}" style="display: flex; flex-direction: column; gap: 16px;">
-            <div class="form-group">
+        <form action="{{ url_for('login') }}" method="POST">
+            <div class="input-group">
                 <label>Username</label>
-                <input type="text" name="username" required placeholder="Enter your username" autofocus autocomplete="username">
+                <input type="text" name="username" class="modern-input" placeholder="Enter your username" required autocomplete="off">
             </div>
-            <div class="form-group">
+            <div class="input-group">
                 <label>Password</label>
-                <input type="password" name="password" required placeholder="Enter your password" autocomplete="current-password">
+                <input type="password" name="password" class="modern-input" placeholder="Enter your password" required>
             </div>
-            <button type="submit" class="btn-submit">
-                <i class="fa-solid fa-right-to-bracket"></i>
-                <span>Continue to Portal</span>
-            </button>
+            <button type="submit" class="btn-login"><i class="fa-solid fa-right-to-bracket" style="margin-right: 8px;"></i> Secure Login</button>
         </form>
-
-        <a href="{{ url_for('home') }}" class="back-link">
-            <i class="fa-solid fa-arrow-left"></i>
-            <span>Back to Welcome Screen</span>
-        </a>
     </div>
+
 </body>
 </html>

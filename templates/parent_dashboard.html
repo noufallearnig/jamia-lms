@@ -2,265 +2,166 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parent Portal - Jamia Imam Navavi-ra</title>
+    <title>Parent Portal - Jamia LMS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <!-- Chart.js add cheyyunnu for digital diagrams -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { margin: 0; background: #05080f !important; color: #f8fafc; font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
+        :root {
+            --bg-body: #f4f7f6; --bg-card: #ffffff; --bg-header: #ffffff;
+            --text-main: #0f172a; --text-sub: #64748b; --border: rgba(0,0,0,0.1);
+            --input-bg: #f8fafc; --hover-bg: rgba(0,0,0,0.04);
+            --shadow-md: 0 10px 30px rgba(0,0,0,0.08);
+            --toggle-bg: #e2e8f0; --toggle-color: #0f172a;
+        }
+        body.dark-mode {
+            --bg-body: #05080f; --bg-card: #0f172a; --bg-header: linear-gradient(145deg, #131e33, #0f172a);
+            --text-main: #f8fafc; --text-sub: #94a3b8; --border: rgba(255, 255, 255, 0.05);
+            --input-bg: rgba(0,0,0,0.25); --hover-bg: rgba(255, 255, 255, 0.05);
+            --shadow-md: 0 10px 30px rgba(0,0,0,0.4);
+            --toggle-bg: #1e293b; --toggle-color: #f59e0b;
+        }
         
-        /* Top Navigation Bar */
-        .top-navbar {
-            background: #0f172a !important; border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            padding: 15px 40px; display: flex; justify-content: space-between; align-items: center;
-        }
-        .logout-btn {
-            background: rgba(239, 68, 68, 0.12) !important; color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.25);
-            padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; transition: background-color 0.3s, color 0.3s, border-color 0.3s; }
+        body { background: var(--bg-body); color: var(--text-main); min-height: 100vh; padding: 30px; }
         
-        .container { max-width: 1100px; margin: 40px auto; display: flex; flex-direction: column; gap: 30px; padding: 0 20px;}
+        .container { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 25px; }
         
-        .dash-wrapper { 
-            background: #0f172a !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; 
-            border-radius: 16px !important; padding: 32px; box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5) !important; 
-        }
+        .top-nav { display: flex; justify-content: flex-end; margin-bottom: -10px; }
+        .theme-toggle-btn { background: var(--toggle-bg); color: var(--toggle-color); border: none; padding: 10px 15px; border-radius: 20px; cursor: pointer; font-size: 13px; font-weight: bold; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .theme-toggle-btn:hover { transform: translateY(-2px); }
 
-        .section-header { 
-            font-size: 16px; font-weight: 800; margin-bottom: 22px; display: flex; align-items: center; gap: 12px; 
-            letter-spacing: 0.8px; text-transform: uppercase; color: #f8fafc !important; 
+        .header-card { 
+            display: flex; justify-content: space-between; align-items: center; 
+            background: var(--bg-header); border: 1px solid var(--border); 
+            border-left: 5px solid #8b5cf6; padding: 25px 35px; border-radius: 16px; box-shadow: var(--shadow-md); 
         }
+        .header-card h1 { font-size: 26px; font-weight: 800; margin: 0; color: var(--text-main); }
+        .header-card p { margin-top: 5px; color: var(--text-sub); font-size: 14px; }
+        .btn-logout { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 10px 20px; border-radius: 8px; font-weight: 700; text-decoration: none; transition: 0.3s; font-size: 13px; text-transform: uppercase;}
+        .btn-logout:hover { background: #ef4444; color: white; }
 
-        /* Chart Container Styling */
-        .chart-container {
-            width: 100%; max-width: 350px; margin: 0 auto 30px auto;
-            background: rgba(255, 255, 255, 0.02); padding: 20px;
-            border-radius: 50%; border: 1px dashed rgba(255,255,255,0.05);
-        }
-
-        /* Homework Tables */
-        table { width: 100%; border-collapse: separate; border-spacing: 0; }
-        th { color: #64748b !important; text-align: left; padding: 12px; font-size: 12px; text-transform: uppercase; border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important; font-weight: 700; }
-        td { padding: 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.03) !important; font-size: 14px; color: #e2e8f0 !important; font-weight: 500; }
+        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 30px; box-shadow: var(--shadow-md); }
+        .card h3 { font-size: 18px; margin-bottom: 20px; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
         
-        .badge-done { background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; }
-        .badge-miss { background: rgba(239, 68, 68, 0.15); color: #ef4444; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; }
+        .grid-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; }
 
-        /* Report Cards */
-        .report-box {
-            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 16px; border-radius: 12px; margin-bottom: 15px; border-left: 4px solid #8b5cf6;
-        }
-        .report-box h4 { margin: 0 0 8px 0; color: #c4b5fd; font-size: 15px;}
-        .report-box p { margin: 0; color: #94a3b8; font-size: 14px; line-height: 1.5; }
+        .info-box { background: var(--hover-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 15px; }
+        .info-box strong { color: #8b5cf6; font-size: 15px; }
+        .info-box p { color: var(--text-main); font-size: 14px; margin-top: 8px; line-height: 1.6; }
+        .info-box span { display: inline-block; background: rgba(139, 92, 246, 0.15); color: #8b5cf6; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; margin-top: 10px;}
 
-        /* Form Inputs */
-        .modern-input { 
-            width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); 
-            border-radius: 8px; padding: 12px 15px; color: #f8fafc; font-size: 14px; margin-top: 6px; 
-        }
-        .modern-input:focus { outline: none; border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1); }
-        .btn-primary { 
-            background: linear-gradient(135deg, #38bdf8, #2563eb) !important; color: white !important; 
-            border: none; padding: 12px 25px; border-radius: 8px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; margin-top: 10px;
-        }
+        .modern-input { width: 100%; padding: 12px 15px; background: var(--input-bg); border: 1px solid var(--border); border-radius: 10px; color: var(--text-main); font-size: 14px; transition: all 0.3s ease; margin-bottom: 15px; }
+        .modern-input:focus { outline: none; border-color: #8b5cf6; }
+        .modern-input option { background: var(--bg-card); color: var(--text-main); }
+        
+        .btn-primary { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.3s; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px; width: 100%;}
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 15px rgba(139, 92, 246, 0.3); }
 
-        .flash-success { background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 12px; border-radius: 8px; margin-bottom: 15px; border: 1px solid rgba(16, 185, 129, 0.2); font-weight: 600;}
+        .progress-bar-container { background: var(--border); border-radius: 10px; height: 10px; width: 100%; overflow: hidden; margin-top: 10px; }
+        .progress-fill { background: linear-gradient(90deg, #8b5cf6, #0ea5e9); height: 100%; border-radius: 10px; transition: width 0.5s ease; }
     </style>
 </head>
-<body class="dark-mode">
-    
-    <div class="top-navbar">
-        <div>
-            <h2 style="margin: 0; font-size: 22px; font-weight: 800; letter-spacing: 1px;">JAMIA <span style="color: #38bdf8;">LMS</span></h2>
-            <small style="color: #94a3b8;">Parent Portal</small>
-        </div>
-        <a href="{{ url_for('logout') }}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Secure Log Out</a>
-    </div>
-
+<body>
     <div class="container">
         
-        <div style="margin-bottom: -10px;">
-            <h1 style="font-size: 28px; margin: 0; font-weight: 800;">Welcome, Parent</h1>
-            <p style="color: #94a3b8; font-size: 16px; margin-top: 5px;">Monitor your child's live academic progress below.</p>
+        <div class="top-nav">
+            <button id="theme-toggle" class="theme-toggle-btn">
+                <i id="theme-icon" class="fa-solid fa-moon"></i> <span id="theme-text">Dark Mode</span>
+            </button>
         </div>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="flash-success"><i class="fa-solid fa-circle-check"></i> {{ message }}</div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-
-        {% if children_data %}
-            {% for child in children_data %}
-            
-            <div style="margin-top: 20px; border-bottom: 2px solid rgba(255,255,255,0.05); padding-bottom: 10px;">
-                <h2 style="color: #38bdf8; margin: 0;"><i class="fa-solid fa-user-graduate"></i> Student: {{ child.username | upper }}</h2>
+        <div class="header-card">
+            <div>
+                <h1><i class="fa-solid fa-users" style="color: #8b5cf6;"></i> Family Dashboard</h1>
+                <p>Welcome. View your child's academic progress and faculty reports below.</p>
             </div>
+            <a href="{{ url_for('logout') }}" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a>
+        </div>
 
-            <!-- LIVE HOMEWORK CHART TRACKER -->
-            <div class="dash-wrapper">
-                <div class="section-header"><i class="fa-solid fa-chart-pie" style="color: #38bdf8;"></i> Overall Performance Diagram</div>
-                
-                <!-- Digital Donut Chart Area -->
-                <div class="chart-container">
-                    <canvas id="progressChart_{{ child.id }}"></canvas>
-                </div>
+        <div class="grid-layout">
+            <div>
+                {% if children_data %}
+                    {% for child in children_data %}
+                        <div class="card" style="margin-bottom: 25px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px;">
+                                <h3 style="margin: 0;"><i class="fa-solid fa-user-graduate" style="color: #0ea5e9;"></i> Student: {{ child.username }}</h3>
+                                <div style="text-align: right;">
+                                    <span style="font-size: 12px; color: var(--text-sub); font-weight: bold; text-transform: uppercase;">Homework Completion</span>
+                                    <div style="font-size: 18px; font-weight: 800; color: #10b981;">{{ child.progress_percent }}%</div>
+                                    <div class="progress-bar-container" style="width: 150px;">
+                                        <div class="progress-fill" style="width: {{ child.progress_percent }}%;"></div>
+                                    </div>
+                                </div>
+                            </div>
 
-                <div style="text-align: center; font-size: 14px; color: #94a3b8; margin-bottom: 25px;">
-                    <strong>{{ child.completed_works }}</strong> Completed &nbsp; | &nbsp; <strong style="color:#ef4444;">{{ child.total_works - child.completed_works }}</strong> Missing out of {{ child.total_works }} Total Tasks
-                </div>
-
-                <!-- Homework Table -->
-                <div style="overflow-x: auto;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Subject</th>
-                                <th>Task Title</th>
-                                <th>Deadline</th>
-                                <th style="text-align: right;">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% if child.homeworks %}
-                                {% for hw in child.homeworks %}
-                                <tr>
-                                    <td><strong style="color: #94a3b8;">{{ hw[1] }}</strong></td>
-                                    <td>{{ hw[0] }}</td>
-                                    <td>{{ hw[2] }}</td>
-                                    <td style="text-align: right;">
-                                        {% if hw[3] %}
-                                            <span class="badge-done"><i class="fa-solid fa-check"></i> Submitted</span>
-                                        {% else %}
-                                            <span class="badge-miss"><i class="fa-solid fa-xmark"></i> Missing</span>
-                                        {% endif %}
-                                    </td>
-                                </tr>
+                            <h3 style="font-size: 14px; color: var(--text-sub); text-transform: uppercase;"><i class="fa-solid fa-file-signature"></i> Faculty Progress Reports</h3>
+                            {% if child.reports %}
+                                {% for r in child.reports %}
+                                    <div class="info-box">
+                                        <div style="display: flex; justify-content: space-between;">
+                                            <strong>{{ r[0] }}</strong>
+                                            <span style="color: var(--text-sub); background: transparent; font-size: 11px;">{{ r[2][:10] }}</span>
+                                        </div>
+                                        <p>{{ r[1] }}</p>
+                                        <span>Official Faculty Report</span>
+                                    </div>
                                 {% endfor %}
                             {% else %}
-                                <tr><td colspan="4" style="text-align: center; color: #64748b; padding: 20px;">No assignments issued yet.</td></tr>
+                                <p style="color: var(--text-sub); font-size: 13px; margin-bottom: 20px;">No faculty reports published yet.</p>
                             {% endif %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- TEACHER REPORTS -->
-            <div class="dash-wrapper">
-                <div class="section-header"><i class="fa-solid fa-file-signature" style="color: #8b5cf6;"></i> Faculty Progress Reports</div>
-                {% if child.reports %}
-                    {% for rep in child.reports %}
-                    <div class="report-box">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                            <h4>{{ rep[0] }}</h4>
-                            <span style="font-size: 12px; color: #64748b;"><i class="fa-regular fa-calendar"></i> {{ rep[2][:10] }}</span>
                         </div>
-                        <p>{{ rep[1] }}</p>
-                    </div>
                     {% endfor %}
                 {% else %}
-                    <p style="color: #64748b; font-size: 14px; text-align: center;">No progress reports have been issued by teachers yet.</p>
+                    <div class="card" style="text-align: center; padding: 50px;">
+                        <i class="fa-solid fa-link-slash" style="font-size: 40px; color: var(--text-sub); margin-bottom: 15px;"></i>
+                        <h3 style="justify-content: center;">No Students Linked</h3>
+                        <p style="color: var(--text-sub);">Please contact the administrator to link your child's account to this portal.</p>
+                    </div>
                 {% endif %}
             </div>
 
-            {% endfor %}
-        {% else %}
-            <div class="dash-wrapper" style="text-align: center; padding: 50px;">
-                <i class="fa-solid fa-link-slash" style="font-size: 3em; color: #64748b; margin-bottom: 15px;"></i>
-                <h3 style="margin: 0; color: #f8fafc;">No Students Linked</h3>
-                <p style="color: #94a3b8;">Please contact the Administrator to link your child's account to your profile.</p>
+            <div>
+                <div class="card" style="border-top: 4px solid #8b5cf6;">
+                    <h3><i class="fa-solid fa-envelope" style="color: #8b5cf6;"></i> Contact Administration</h3>
+                    <p style="font-size: 13px; color: var(--text-sub); margin-bottom: 20px;">Send a message, inquiry, or feedback regarding your child directly to the institution admin.</p>
+                    
+                    <form action="{{ url_for('submit_parent_feedback') }}" method="POST">
+                        <select name="student_id" class="modern-input" required>
+                            <option value="" disabled selected>-- Select Child --</option>
+                            {% for child in children_data %}
+                                <option value="{{ child.id }}">{{ child.username }}</option>
+                            {% endfor %}
+                        </select>
+                        <textarea name="message" class="modern-input" rows="4" placeholder="Type your message here..." required></textarea>
+                        <button type="submit" class="btn-primary"><i class="fa-solid fa-paper-plane"></i> Send Message</button>
+                    </form>
+                </div>
             </div>
-        {% endif %}
-
-        <!-- FEEDBACK TO ADMIN FORM -->
-        {% if children_data %}
-        <div class="dash-wrapper">
-            <div class="section-header"><i class="fa-solid fa-envelope" style="color: #10b981;"></i> Message Administration / Faculty</div>
-            <form action="{{ url_for('submit_parent_feedback') }}" method="POST" style="display: flex; flex-direction: column; gap: 15px;">
-                
-                <div>
-                    <label style="font-size: 12px; font-weight: 700; text-transform: uppercase;">Select Child Regarding Feedback:</label>
-                    <select name="student_id" required class="modern-input" style="max-width: 300px;">
-                        <option value="" disabled selected>-- Choose Student --</option>
-                        {% for child in children_data %}
-                            <option value="{{ child.id }}">{{ child.username }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                
-                <div>
-                    <label style="font-size: 12px; font-weight: 700; text-transform: uppercase;">Your Message:</label>
-                    <textarea name="message" rows="4" required placeholder="Write your questions or feedback here. Admin will review and forward to the correct faculty member..." class="modern-input" style="resize: vertical;"></textarea>
-                </div>
-                
-                <button type="submit" class="btn-primary" style="align-self: flex-start;">
-                    <i class="fa-solid fa-paper-plane"></i> Submit Feedback
-                </button>
-            </form>
         </div>
-        {% endif %}
 
     </div>
 
-    <!-- Script to render the Digital Charts automatically -->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            {% for child in children_data %}
-                var ctx = document.getElementById('progressChart_{{ child.id }}').getContext('2d');
-                
-                var completed = {{ child.completed_works }};
-                var total = {{ child.total_works }};
-                var missing = total - completed;
-
-                // If no works are assigned yet, show a grey empty donut chart
-                if (total === 0) {
-                    new Chart(ctx, {
-                        type: 'doughnut',
-                        data: {
-                            labels: ['No Tasks Assigned'],
-                            datasets: [{
-                                data: [1],
-                                backgroundColor: ['#1e293b'],
-                                borderWidth: 0
-                            }]
-                        },
-                        options: { 
-                            cutout: '75%',
-                            plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8' } } } 
-                        }
-                    });
-                } else {
-                    // Show digital chart with Completed (Green) and Missing (Red) data
-                    new Chart(ctx, {
-                        type: 'doughnut',
-                        data: {
-                            labels: ['Completed Works', 'Missing / Pending'],
-                            datasets: [{
-                                data: [completed, missing],
-                                backgroundColor: ['#10b981', '#ef4444'], // Green & Red
-                                borderWidth: 3,
-                                borderColor: '#0f172a',
-                                hoverOffset: 4
-                            }]
-                        },
-                        options: {
-                            cutout: '75%', // Makes it a donut shape
-                            responsive: true,
-                            plugins: {
-                                legend: {
-                                    position: 'bottom',
-                                    labels: { color: '#f8fafc', font: { family: 'Segoe UI', size: 13 } }
-                                }
-                            }
-                        }
-                    });
-                }
-            {% endfor %}
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const themeText = document.getElementById('theme-text');
+        
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeIcon.className = 'fa-solid fa-sun';
+            themeText.textContent = 'Light Mode';
+        }
+        
+        themeToggleBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark');
+                themeIcon.className = 'fa-solid fa-sun';
+                themeText.textContent = 'Light Mode';
+            } else {
+                localStorage.setItem('theme', 'light');
+                themeIcon.className = 'fa-solid fa-moon';
+                themeText.textContent = 'Dark Mode';
+            }
         });
     </script>
 </body>

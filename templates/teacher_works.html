@@ -2,30 +2,61 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Works & Homework Desk - Faculty Portal</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=17.0">
+    <title>Works & Homework Desk - Faculty</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        body { margin: 0; display: flex; background: #05080f !important; color: #f8fafc; font-family: 'Segoe UI', system-ui, sans-serif; height: 100vh; overflow: hidden; }
-        .side-nav-menu { width: 280px; background: #0b1121 !important; padding: 25px 20px; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; z-index: 10; }
-        .main-content { flex: 1; padding: 45px 55px; overflow-y: auto; background: radial-gradient(circle at top left, #0b1121, #05080f) !important; }
-        .nav-link { display: flex; align-items: center; gap: 12px; color: #94a3b8 !important; text-decoration: none; padding: 14px 18px; border-radius: 10px; margin-bottom: 6px; font-size: 14px; font-weight: 600; transition: all 0.3s ease; }
-        .nav-link i { font-size: 16px; opacity: 0.6; }
-        .nav-link:hover { background: rgba(255, 255, 255, 0.03) !important; color: #e2e8f0 !important; }
-        .nav-link.active { background: linear-gradient(135deg, #10b981, #059669) !important; color: #ffffff !important; }
-        .dash-wrapper { background: #0f172a !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; border-radius: 16px !important; padding: 32px; margin-bottom: 30px; }
-        .section-header { font-size: 14px; font-weight: 800; margin-bottom: 22px; display: flex; align-items: center; gap: 12px; letter-spacing: 0.8px; text-transform: uppercase; color: #f8fafc !important; }
-        .modern-input { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px 15px; color: #f8fafc; font-family: inherit; font-size: 14px; margin-bottom: 15px; }
-        .btn-primary { background: linear-gradient(135deg, #10b981, #059669) !important; color: white !important; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-block; }
+        :root {
+            --bg-body: #f4f7f6; --bg-sidebar: #ffffff; --bg-main: #f4f7f6; --bg-card: #ffffff;
+            --text-main: #0f172a; --text-sub: #64748b; --border: rgba(0,0,0,0.1); 
+            --hover-bg: rgba(0,0,0,0.04); --input-bg: #f8fafc; --table-th: #f8fafc;
+            --shadow-sm: 0 4px 15px rgba(0,0,0,0.05); --shadow-md: 0 10px 25px rgba(0,0,0,0.08);
+        }
+        body.dark-mode {
+            --bg-body: #05080f; --bg-sidebar: #0b1121; --bg-main: radial-gradient(circle at top left, #0b1121, #05080f);
+            --bg-card: #0f172a; --text-main: #f8fafc; --text-sub: #94a3b8; 
+            --border: rgba(255, 255, 255, 0.05); --hover-bg: rgba(255, 255, 255, 0.05); 
+            --input-bg: rgba(0,0,0,0.25); --table-th: transparent;
+            --shadow-sm: 5px 0 15px rgba(0,0,0,0.3); --shadow-md: 0 10px 30px rgba(0,0,0,0.4);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; transition: background-color 0.3s, color 0.3s, border-color 0.3s; }
+        body { margin: 0; display: flex; background: var(--bg-body); color: var(--text-main); height: 100vh; overflow: hidden; }
+        
+        .side-nav-menu { width: 280px; background: var(--bg-sidebar); padding: 25px 20px; border-right: 1px solid var(--border); display: flex; flex-direction: column; z-index: 10; box-shadow: var(--shadow-sm); }
+        .sidebar-logo { text-align: center; margin-bottom: 40px; }
+        .sidebar-logo img { width: 65px; height: auto; margin-bottom: 10px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); }
+        .sidebar-logo h2 { font-size: 22px; font-weight: 800; letter-spacing: 1px; margin: 0; color: var(--text-main); }
+        .sidebar-logo span { color: #10b981; }
+        .sidebar-logo small { font-size: 11px; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; }
+        
+        .nav-link { display: flex; align-items: center; gap: 12px; color: var(--text-sub); text-decoration: none; padding: 14px 18px; border-radius: 10px; margin-bottom: 6px; font-size: 14px; font-weight: 600; }
+        .nav-link i { font-size: 16px; width: 20px; text-align: center; opacity: 0.7; }
+        .nav-link:hover { background: var(--hover-bg); color: var(--text-main); transform: translateX(4px); }
+        .nav-link.active { background: linear-gradient(135deg, #10b981, #059669); color: #ffffff; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); border: none; }
+        .nav-link.active i { opacity: 1; }
+        .logout-btn { color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); background: rgba(239, 68, 68, 0.05); justify-content: center; margin-top: auto; }
+        
+        .main-content { flex: 1; padding: 40px 50px; overflow-y: auto; background: var(--bg-main); }
+        .dash-wrapper { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 30px; margin-bottom: 30px; box-shadow: var(--shadow-md); }
+        .section-header { font-size: 14px; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-main); }
+        
+        .modern-input { width: 100%; padding: 12px 15px; background: var(--input-bg); border: 1px solid var(--border); border-radius: 10px; color: var(--text-main); font-size: 14px; transition: all 0.3s ease; margin-bottom: 15px; }
+        .modern-input:focus { outline: none; border-color: #10b981; }
+        .modern-input option { background: var(--bg-card); color: var(--text-main); }
+        
+        .btn-primary { background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px;}
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 15px rgba(16, 185, 129, 0.3); }
+
         table { width: 100%; border-collapse: separate; border-spacing: 0; }
-        th { color: #64748b !important; text-align: left; padding: 15px; font-size: 12px; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.05) !important; }
-        td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.03) !important; font-size: 14px; color: #e2e8f0 !important; vertical-align: middle; }
+        th { background: var(--table-th); color: var(--text-sub); text-align: left; padding: 15px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border); }
+        td { padding: 15px; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-main); vertical-align: middle; }
     </style>
 </head>
 <body>
     <div class="side-nav-menu">
-        <div style="text-align: center; margin-bottom: 45px; padding-top: 15px;">
-            <h2 style="margin: 0; font-size: 26px; font-weight: 800; letter-spacing: 1px;">JAMIA <span style="color: #10b981;">LMS</span></h2>
+        <div class="sidebar-logo">
+            <img src="{{ url_for('static', filename='JAMIA-IMAM-NAVAVI-RA_LOGO.png') }}" alt="Jamia Logo">
+            <h2>JAMIA <span>LMS</span></h2>
+            <small>Faculty Control</small>
         </div>
         <a href="{{ url_for('teacher_dashboard') }}" class="nav-link"><i class="fas fa-chalkboard-teacher"></i> Dashboard</a>
         <a href="{{ url_for('teacher_kithabs') }}" class="nav-link"><i class="fas fa-book-open"></i> Kithab Desk</a>
@@ -33,56 +64,51 @@
         <a href="{{ url_for('teacher_notes') }}" class="nav-link"><i class="fas fa-pen-nib"></i> Lecture Notes</a>
         <a href="{{ url_for('teacher_works') }}" class="nav-link active"><i class="fas fa-tasks"></i> Homework Desk</a>
         <a href="{{ url_for('teacher_exams') }}" class="nav-link"><i class="fas fa-graduation-cap"></i> Exams & Results</a>
+        <a href="{{ url_for('teacher_reports') }}" class="nav-link"><i class="fas fa-file-signature"></i> Progress Reports</a>
+        <a href="{{ url_for('logout') }}" class="nav-link logout-btn"><i class="fas fa-sign-out-alt"></i> Secure Log Out</a>
     </div>
 
     <main class="main-content">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-            <h1 style="margin: 0; font-size: 32px; font-weight: 800;"><i class="fa-solid fa-list-check" style="color: #10b981;"></i> Works & Homework Desk</h1>
+        <div style="margin-bottom: 30px;">
+            <h1 style="margin: 0; font-size: 32px; font-weight: 800; color: var(--text-main);"><i class="fa-solid fa-list-check" style="color: #10b981;"></i> Works & Homework Desk</h1>
+            <p style="margin: 8px 0 0 0; font-size: 15px; color: var(--text-sub);">Assign tasks, essays, and monitor student submissions.</p>
         </div>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}{% for category, message in messages %}<div style="background: rgba(16,185,129,0.1); padding: 15px; color: #10b981; border: 1px solid #10b981; border-radius: 8px; margin-bottom: 20px;"><i class="fa-solid fa-circle-check"></i> {{ message }}</div>{% endfor %}{% endif %}
-        {% endwith %}
-
         <div class="dash-wrapper">
-            <div class="section-header"><i class="fa-solid fa-plus-circle"></i> Create New Assignment</div>
+            <div class="section-header"><i class="fa-solid fa-plus-circle" style="color: #10b981;"></i> Create New Assignment</div>
             <form action="{{ url_for('teacher_works') }}" method="POST">
                 <div style="display: flex; gap: 15px;">
                     <div style="flex: 1;">
-                        <label style="font-size: 11px; color: #94a3b8; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; display: block;">Select Semester</label>
+                        <label style="font-size: 11px; color: var(--text-sub); font-weight: bold; text-transform: uppercase; margin-bottom: 5px; display: block;">Select Semester</label>
                         <select name="semester_id" class="modern-input" required>
                             <option value="" disabled selected>-- Select Semester --</option>
                             <option value="0" style="color: #10b981; font-weight: bold;">Public (All Students)</option>
-                            {% for sem in semesters %}
-                                <option value="{{ sem[0] }}">{{ sem[1] }}</option>
-                            {% endfor %}
+                            {% for sem in semesters %}<option value="{{ sem[0] }}">{{ sem[1] }}</option>{% endfor %}
                         </select>
                     </div>
                     <div style="flex: 1;">
-                        <label style="font-size: 11px; color: #94a3b8; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; display: block;">Subject Name</label>
+                        <label style="font-size: 11px; color: var(--text-sub); font-weight: bold; text-transform: uppercase; margin-bottom: 5px; display: block;">Subject Name</label>
                         <input type="text" name="subject" class="modern-input" placeholder="e.g., Fiqh, Nahw..." required>
                     </div>
                     <div style="flex: 1;">
-                        <label style="font-size: 11px; color: #94a3b8; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; display: block;">Assignment Title</label>
+                        <label style="font-size: 11px; color: var(--text-sub); font-weight: bold; text-transform: uppercase; margin-bottom: 5px; display: block;">Assignment Title</label>
                         <input type="text" name="title" class="modern-input" placeholder="e.g., Essay on Thareekh" required>
                     </div>
                 </div>
-                
-                <label style="font-size: 11px; color: #94a3b8; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; display: block;">Detailed Instructions</label>
+                <label style="font-size: 11px; color: var(--text-sub); font-weight: bold; text-transform: uppercase; margin-bottom: 5px; display: block;">Detailed Instructions</label>
                 <textarea name="description" class="modern-input" rows="3" placeholder="Write clear submission instructions here..." required></textarea>
-                
                 <div style="display: flex; gap: 15px; align-items: center;">
                     <div style="flex: 1; max-width: 250px;">
-                        <label style="font-size: 11px; color: #94a3b8; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; display: block;">Due Date</label>
+                        <label style="font-size: 11px; color: var(--text-sub); font-weight: bold; text-transform: uppercase; margin-bottom: 5px; display: block;">Due Date</label>
                         <input type="date" name="due_date" class="modern-input" required style="margin-bottom: 0;">
                     </div>
-                    <button type="submit" class="btn-primary" style="margin-top: 20px;"><i class="fa-solid fa-paper-plane"></i> Assign Homework</button>
+                    <button type="submit" class="btn-primary" style="margin-top: 15px;"><i class="fa-solid fa-paper-plane"></i> Assign Homework</button>
                 </div>
             </form>
         </div>
 
         <div class="dash-wrapper">
-            <div class="section-header"><i class="fa-solid fa-tasks"></i> Active Assignments & Submissions</div>
+            <div class="section-header"><i class="fa-solid fa-tasks" style="color: #10b981;"></i> Active Assignments</div>
             <table>
                 <thead><tr><th>Task Info</th><th>Semester</th><th>Due Date</th><th>Submissions</th><th>Action</th></tr></thead>
                 <tbody>
@@ -90,34 +116,33 @@
                         {% for w in works %}
                         <tr>
                             <td>
-                                <strong>{{ w[2] }}</strong><br>
-                                <span style="font-size: 12px; color: #94a3b8;">Subject: {{ w[1] }}</span>
+                                <strong style="color: var(--text-main);">{{ w[2] }}</strong><br>
+                                <span style="font-size: 12px; color: var(--text-sub);">Subject: {{ w[1] }}</span>
                             </td>
-                            <td>
-                                <span style="display: inline-block; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700;">
-                                    {% if w[8] %}{{ w[8] }}{% else %}All Students{% endif %}
-                                </span>
-                            </td>
-                            <td><span style="color: #f8fafc; font-size: 13px;"><i class="far fa-calendar-alt" style="color: #ef4444;"></i> {{ w[4] }}</span></td>
-                            <td>
-                                <span style="background: #334155; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold;">{{ w[6] }} Files</span>
-                            </td>
+                            <td><span style="display: inline-block; background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700;">{% if w[8] %}{{ w[8] }}{% else %}All Students{% endif %}</span></td>
+                            <td><span style="color: var(--text-main); font-size: 13px;"><i class="far fa-calendar-alt" style="color: #ef4444;"></i> {{ w[4] }}</span></td>
+                            <td><span style="background: var(--hover-bg); border: 1px solid var(--border); padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; color: var(--text-main);">{{ w[6] }} Files</span></td>
                             <td>
                                 <div style="display: flex; gap: 8px;">
-                                    <a href="{{ url_for('teacher_submissions', work_id=w[0]) }}" class="btn-primary" style="padding: 6px 12px; font-size: 12px;"><i class="fa-solid fa-eye"></i> View & Grade</a>
-                                    <form action="{{ url_for('delete_work', work_id=w[0]) }}" method="POST" style="margin: 0;" onsubmit="return confirm('Delete this assignment permanently?');">
-                                        <button type="submit" style="background: rgba(239,68,68,0.1); color: #ef4444; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer;"><i class="fas fa-trash"></i></button>
-                                    </form>
+                                    <a href="{{ url_for('teacher_submissions', work_id=w[0]) }}" class="btn-primary" style="padding: 6px 12px; font-size: 11px;"><i class="fa-solid fa-eye"></i> Grade</a>
+                                    <form action="{{ url_for('delete_work', work_id=w[0]) }}" method="POST" style="margin: 0;" onsubmit="return confirm('Delete permanently?');"><button type="submit" style="background: rgba(239,68,68,0.1); color: #ef4444; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer;"><i class="fas fa-trash"></i></button></form>
                                 </div>
                             </td>
                         </tr>
                         {% endfor %}
                     {% else %}
-                        <tr><td colspan="5" style="text-align: center; color: #64748b;">No homework tasks assigned yet.</td></tr>
+                        <tr><td colspan="5" style="text-align: center; color: var(--text-sub); padding: 20px;">No homework tasks assigned yet.</td></tr>
                     {% endif %}
                 </tbody>
             </table>
         </div>
     </main>
+
+    <!-- AUTOMATIC THEME SCRIPT (NO BUTTON NEEDED) -->
+    <script>
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+    </script>
 </body>
 </html>

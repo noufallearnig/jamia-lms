@@ -3,267 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Portal - Jamia Imam Navavi-ra</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=14.0">
-    
+    <title>Student Portal - Jamia LMS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        body { 
-            margin: 0; 
-            display: flex; 
-            background: #f3f6f9 !important; 
-            color: #1e293b; 
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
-            height: 100vh;
-            overflow: hidden;
-        }
-        
-        .side-nav-menu { 
-            width: 280px; 
-            background: #ffffff !important; 
-            padding: 25px 20px; 
-            border: none !important; 
-            border-right: 1px solid #e9ecef !important; 
-            display: flex; 
-            flex-direction: column; 
-            box-shadow: 4px 0 24px rgba(0,0,0,0.02) !important;
-            z-index: 10;
-        }
-        
-        .main-content { 
-            flex: 1; 
-            padding: 45px 55px; 
-            overflow-y: auto; 
-            background: #f3f6f9 !important; 
+        /* THEME VARIABLES */
+        :root {
+            --bg-body: #f4f7f6;
+            --bg-sidebar: #ffffff;
+            --bg-main: #f4f7f6;
+            --bg-card: #ffffff;
+            --bg-card-grad: #ffffff;
+            --text-main: #0f172a;
+            --text-sub: #64748b;
+            --border: rgba(0,0,0,0.1);
+            --hover-bg: rgba(0,0,0,0.04);
+            --shadow-sm: 0 4px 15px rgba(0,0,0,0.05);
+            --shadow-md: 0 10px 25px rgba(0,0,0,0.08);
+            --toggle-bg: #e2e8f0;
+            --toggle-color: #0f172a;
+            --table-th: #f8fafc;
         }
 
-        h1, h2, h4, .section-header { color: #0f172a !important; }
-        p, small { color: #475569 !important; }
-        
-        .nav-link { 
-            display: flex; 
-            align-items: center; 
-            gap: 12px; 
-            color: #475569 !important; 
-            text-decoration: none; 
-            padding: 14px 18px; 
-            border-radius: 10px; 
-            margin-bottom: 6px; 
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .nav-link i { font-size: 16px; opacity: 0.6; }
-        .nav-link:hover { background: #f1f5f9 !important; color: #0f172a !important; transform: translateX(4px); }
-        
-        .nav-link.active { 
-            background: linear-gradient(135deg, #2563eb, #1d4ed8) !important; 
-            color: #ffffff !important; 
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.25) !important;
-        }
-        
-        .logout-btn { color: #ef4444 !important; background: transparent !important; justify-content: center; margin-top: 15px; border: 1px solid #fecaca !important; }
-        .logout-btn:hover { background: #ef4444 !important; color: #ffffff !important; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2) !important; }
-        
-        .dash-wrapper { 
-            background: #ffffff !important; 
-            border: 1px solid #e9ecef !important; 
-            border-radius: 16px !important; 
-            padding: 32px; 
-            margin-bottom: 30px; 
-            box-shadow: 0 4px 24px rgba(0,0,0,0.04) !important; 
-            position: relative;
-        }
-        
-        .section-header { 
-            font-size: 14px; font-weight: 800; margin-bottom: 22px; display: flex; align-items: center; gap: 12px; 
-            letter-spacing: 0.8px; text-transform: uppercase; color: #1e293b !important;
-        }
-        .section-header i { color: #2563eb !important; font-size: 16px; }
-        
-        .modules-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin-top: 20px; }
-
-        .mod-item {
-            background: #ffffff !important;
-            border: 1px solid #e9ecef !important;
-            border-radius: 14px !important;
-            padding: 28px 24px;
-            text-decoration: none;
-            display: block;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.02) !important;
+        body.dark-mode {
+            --bg-body: #05080f;
+            --bg-sidebar: #0b1121;
+            --bg-main: radial-gradient(circle at top left, #0b1121, #05080f);
+            --bg-card: #0f172a;
+            --bg-card-grad: linear-gradient(145deg, #131e33, #0f172a);
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --border: rgba(255, 255, 255, 0.05);
+            --hover-bg: rgba(255, 255, 255, 0.05);
+            --shadow-sm: 5px 0 15px rgba(0,0,0,0.3);
+            --shadow-md: 0 10px 30px rgba(0,0,0,0.4);
+            --toggle-bg: #1e293b;
+            --toggle-color: #f59e0b;
+            --table-th: transparent;
         }
 
-        .mod-item::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
-        .mod-library::before { background: #00d2ff; } 
-        .mod-classes::before { background: #8b5cf6; } 
-        .mod-notes::before   { background: #f59e0b; } 
-        .mod-works::before   { background: #10b981; } 
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; transition: background-color 0.3s, color 0.3s, border-color 0.3s; }
+        body { margin: 0; display: flex; background: var(--bg-body); color: var(--text-main); height: 100vh; overflow: hidden; }
+        
+        /* SIDEBAR */
+        .side-nav-menu { width: 280px; background: var(--bg-sidebar); padding: 25px 20px; border-right: 1px solid var(--border); display: flex; flex-direction: column; z-index: 10; box-shadow: var(--shadow-sm); }
+        .sidebar-logo { text-align: center; margin-bottom: 40px; }
+        .sidebar-logo img { width: 65px; height: auto; margin-bottom: 10px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); }
+        .sidebar-logo h2 { font-size: 22px; font-weight: 800; letter-spacing: 1px; margin: 0; color: var(--text-main); }
+        .sidebar-logo span { color: #0ea5e9; }
+        .sidebar-logo small { font-size: 11px; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; }
+        
+        .nav-link { display: flex; align-items: center; gap: 12px; color: var(--text-sub); text-decoration: none; padding: 14px 18px; border-radius: 10px; margin-bottom: 6px; font-size: 14px; font-weight: 600; }
+        .nav-link i { font-size: 16px; width: 20px; text-align: center; opacity: 0.7; }
+        .nav-link:hover { background: var(--hover-bg); color: var(--text-main); transform: translateX(4px); }
+        .nav-link.active { background: linear-gradient(135deg, #0ea5e9, #0284c7); color: #ffffff; box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3); border: none; }
+        .nav-link.active i { opacity: 1; }
+        
+        .logout-btn { color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); background: rgba(239, 68, 68, 0.05); justify-content: center; margin-top: auto; }
+        .logout-btn:hover { background: #ef4444; color: white; }
 
-        .mod-item:hover { transform: translateY(-6px) !important; box-shadow: 0 16px 35px rgba(0,0,0,0.08) !important; border-color: #cbd5e1 !important; }
-        .mod-item h4 { margin: 0 0 10px 0; font-size: 16px; display: flex; align-items: center; gap: 10px; font-weight: 700;}
-        .mod-item p { margin: 0; font-size: 13px; line-height: 1.6; color: #64748b !important; }
+        /* MAIN CONTENT */
+        .main-content { flex: 1; padding: 40px 50px; overflow-y: auto; background: var(--bg-main); }
+        .page-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 35px; }
+        .page-header h1 { font-size: 32px; font-weight: 800; margin: 0; color: var(--text-main); }
+        .page-header p { font-size: 15px; color: var(--text-sub); margin-top: 5px; }
+        .page-header strong { color: #0ea5e9; text-transform: uppercase; }
 
-        .notice-box {
-            background: #f0f7ff !important; padding: 20px 24px; border-radius: 12px;
-            border: 1px solid #cbe2ff !important; border-left: 5px solid #2563eb !important; margin-bottom: 12px;
-        }
-        .notice-box strong { color: #1e40af !important; font-size: 13px; letter-spacing: 0.5px;}
-        .notice-box p { color: #1e3a8a !important; margin: 6px 0 0 0; font-size: 14px; line-height: 1.6; }
+        .btn-ai { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white; padding: 12px 25px; border-radius: 8px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; border: none; font-size: 14px;}
+        .theme-toggle-btn { background: var(--toggle-bg); color: var(--toggle-color); border: none; padding: 10px 15px; border-radius: 20px; cursor: pointer; font-size: 13px; font-weight: bold; display: flex; align-items: center; gap: 8px; box-shadow: var(--shadow-sm); margin-bottom: 10px; margin-left: auto; }
+        .theme-toggle-btn:hover { transform: translateY(-2px); }
 
+        .dash-wrapper { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 30px; margin-bottom: 30px; box-shadow: var(--shadow-md); }
+        .section-header { font-size: 14px; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-main); }
+        
+        .two-col-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        
+        .notice-box { background: var(--bg-card-grad); border-left: 4px solid #10b981; padding: 18px; border-radius: 12px; margin-bottom: 12px; box-shadow: var(--shadow-sm); border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+        .notice-box.announcement { border-left-color: #0ea5e9; }
+        
         table { width: 100%; border-collapse: separate; border-spacing: 0; }
-        th { color: #64748b !important; text-align: left; padding: 16px; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #f1f5f9 !important; background: transparent !important; font-weight: 700; }
-        td { padding: 16px; border-bottom: 1px solid #f1f5f9 !important; font-size: 14px; color: #1e293b !important; background: transparent !important; font-weight: 500;}
-        tr:hover td { background: #f8fafc !important; }
-        .status-badge { background: #ecfdf5 !important; color: #059669 !important; padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; margin-left: 10px; border: 1px solid #a7f3d0;}
+        th { background: var(--table-th); color: var(--text-sub); text-align: left; padding: 15px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border); }
+        td { padding: 15px; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-main); }
 
-        /* Dark Mode */
-        body.dark-mode { background: #05080f !important; color: #f8fafc !important; }
-        body.dark-mode .main-content { background: radial-gradient(circle at top right, #0b1121, #05080f) !important; }
-        body.dark-mode .side-nav-menu { background: #0b1121 !important; border-right: 1px solid rgba(255, 255, 255, 0.04) !important; box-shadow: 5px 0 25px rgba(0,0,0,0.2) !important; }
-        
-        body.dark-mode h1, body.dark-mode h2, body.dark-mode h4, body.dark-mode .section-header { color: #f8fafc !important; }
-        body.dark-mode p, body.dark-mode small, body.dark-mode .nav-link { color: #94a3b8 !important; }
-        
-        body.dark-mode .nav-link:hover { background: rgba(255, 255, 255, 0.03) !important; color: #e2e8f0 !important; }
-        body.dark-mode .nav-link.active { color: #ffffff !important; }
-        body.dark-mode .logout-btn { background: rgba(239, 68, 68, 0.05) !important; border-color: rgba(239, 68, 68, 0.1) !important; }
-
-        body.dark-mode .dash-wrapper { background: #0f172a !important; border: 1px solid rgba(255, 255, 255, 0.06) !important; box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5) !important; }
-        body.dark-mode .section-header i { color: #38bdf8 !important; }
-
-        body.dark-mode .mod-item { background: linear-gradient(145deg, #131e33, #1a2438) !important; border: 1px solid rgba(255, 255, 255, 0.05) !important; box-shadow: none !important;}
-        body.dark-mode .mod-item:hover { background: linear-gradient(145deg, #17243d, #1f2b42) !important; border-color: rgba(255, 255, 255, 0.15) !important; }
-        body.dark-mode .mod-item p { color: #94a3b8 !important; }
-
-        body.dark-mode .notice-box { background: rgba(37, 99, 235, 0.05) !important; border: 1px solid rgba(37, 99, 235, 0.2) !important; border-left: 4px solid #38bdf8 !important; }
-        body.dark-mode .notice-box strong { color: #38bdf8 !important; }
-        body.dark-mode .notice-box p { color: #e2e8f0 !important; }
-
-        body.dark-mode th { color: #64748b !important; border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important; }
-        body.dark-mode td { color: #e2e8f0 !important; border-bottom: 1px solid rgba(255, 255, 255, 0.03) !important; }
-        body.dark-mode tr:hover td { background: rgba(255, 255, 255, 0.02) !important; }
-        body.dark-mode .status-badge { background: rgba(16, 185, 129, 0.1) !important; color: #10b981 !important; border-color: transparent !important;}
-
-        .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+        .badge { display: inline-block; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+        .badge-pending { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+        .badge-graded { background: rgba(16, 185, 129, 0.1); color: #10b981; }
     </style>
 </head>
-<body class="dark-mode">
+<body>
 
     <div class="side-nav-menu">
-        <div style="text-align: center; margin-bottom: 45px; padding-top: 15px;">
-            <h2 style="margin: 0; font-size: 26px; font-weight: 800; letter-spacing: 1px;">JAMIA <span style="color: #2563eb;">LMS</span></h2>
-            <small style="font-size: 13px; letter-spacing: 0.5px;">Imam Navavi-ra</small>
+        <div class="sidebar-logo">
+            <img src="{{ url_for('static', filename='JAMIA-IMAM-NAVAVI-RA_LOGO.png') }}" alt="Jamia Logo">
+            <h2>JAMIA <span>LMS</span></h2>
+            <small>Student Portal</small>
         </div>
-
-        <div style="font-size: 11px; font-weight: 800; margin-bottom: 15px; padding-left: 15px; letter-spacing: 1.5px; text-transform: uppercase; color: #94a3b8;">Main Menu</div>
-        
-        <a href="{{ url_for('student_dashboard') }}" class="nav-link active"><i class="fas fa-home"></i> Dashboard</a>
+        <a href="{{ url_for('student_dashboard') }}" class="nav-link active"><i class="fas fa-home"></i> Home</a>
         <a href="{{ url_for('student_library') }}" class="nav-link"><i class="fas fa-book-open"></i> Kithab Library</a>
-        <a href="{{ url_for('student_classes') }}" class="nav-link"><i class="fas fa-video"></i> My Classes</a>
-        <a href="{{ url_for('student_notes') }}" class="nav-link"><i class="fas fa-pen-nib"></i> My Notes</a>
-        <a href="{{ url_for('student_works') }}" class="nav-link"><i class="fas fa-clipboard-check"></i> Works</a>
-        
-        <div style="font-size: 11px; font-weight: 800; margin: 30px 0 15px 0; padding-left: 15px; letter-spacing: 1.5px; text-transform: uppercase; color: #94a3b8;">Innovation</div>
-        <a href="#" class="nav-link"><i class="fas fa-robot"></i> AI Assistant <span style="background: rgba(37, 99, 235, 0.1); color: #2563eb; font-size: 10px; padding: 4px 8px; border-radius: 6px; margin-left: auto;">Beta</span></a>
-
-        <div style="margin-top: auto;">
-            <a href="#" class="nav-link"><i class="fas fa-cog"></i> Account Settings</a>
-            <a href="{{ url_for('logout') }}" class="nav-link logout-btn"><i class="fas fa-sign-out-alt"></i> Secure Log Out</a>
-        </div>
+        <a href="{{ url_for('student_classes') }}" class="nav-link"><i class="fas fa-video"></i> Class Sessions</a>
+        <a href="{{ url_for('student_notes') }}" class="nav-link"><i class="fas fa-pen-nib"></i> Lecture Notes</a>
+        <a href="{{ url_for('student_works') }}" class="nav-link"><i class="fas fa-tasks"></i> Homework & Works</a>
+        <a href="{{ url_for('student_exams') }}" class="nav-link"><i class="fas fa-graduation-cap"></i> Exams & Results</a>
+        <a href="{{ url_for('logout') }}" class="nav-link logout-btn"><i class="fas fa-sign-out-alt"></i> Log Out</a>
     </div>
 
     <main class="main-content">
-        <div class="top-header">
+        <div class="page-header">
             <div>
-                <h1 style="margin: 0; font-size: 32px; font-weight: 800;">Welcome back, {{ session.username | default('Noufal') }}</h1>
-                <p style="margin: 8px 0 0 0; font-size: 16px;">Here is what's happening with your studies today.</p>
+                <h1>Student Dashboard</h1>
+                <p>Welcome, <strong>{{ session.username }}</strong>. View your updates below.</p>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: flex-end;">
+                <button id="theme-toggle" class="theme-toggle-btn">
+                    <i id="theme-icon" class="fa-solid fa-moon"></i> <span id="theme-text">Dark Mode</span>
+                </button>
+                <a href="{{ url_for('student_ai') }}" class="btn-ai"><i class="fas fa-robot"></i> AI Assistant</a>
             </div>
         </div>
 
-        <!-- Dynamic Announcements Feed -->
-        <div class="dash-wrapper">
-            <div class="section-header"><i class="fas fa-bullhorn"></i> Official Announcements</div>
-            {% if announcements %}
-                {% for ann in announcements %}
-                <div class="notice-box">
-                    <strong style="text-transform: uppercase;"><i class="fas fa-user-tie"></i> From {{ ann[1] }} &bull; {{ ann[3] }}</strong>
-                    <p>{{ ann[2] }}</p>
+        <div class="two-col-grid">
+            <!-- ANNOUNCEMENTS -->
+            <div class="dash-wrapper" style="margin-bottom: 0;">
+                <div class="section-header"><i class="fas fa-bullhorn" style="color: #0ea5e9;"></i> Latest Announcements</div>
+                <div style="max-height: 400px; overflow-y: auto; padding-right: 5px;">
+                    {% if announcements %}
+                        {% for ann in announcements %}
+                        <div class="notice-box announcement">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <strong style="font-size: 11px; color: #0ea5e9; text-transform: uppercase;"><i class="fas fa-user-circle"></i> {{ ann[1] }}</strong>
+                                <span style="font-size: 11px; color: var(--text-sub);">{{ ann[3][:10] }}</span>
+                            </div>
+                            <p style="margin: 0; font-size: 14px; line-height: 1.6; color: var(--text-main);">{{ ann[2] }}</p>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div style="text-align: center; padding: 30px; color: var(--text-sub); font-size: 14px;">
+                            <i class="fas fa-inbox" style="font-size: 24px; margin-bottom: 10px; opacity: 0.5;"></i><br>
+                            No announcements at the moment.
+                        </div>
+                    {% endif %}
                 </div>
-                {% endfor %}
-            {% else %}
-                <div class="notice-box">
-                    <strong style="text-transform: uppercase;"><i class="fas fa-info-circle"></i> System Notice</strong>
-                    <p>Welcome to Jamia Imam Navavi-ra LMS. No new faculty broadcasts at this time.</p>
-                </div>
-            {% endif %}
-        </div>
-
-        <!-- Academic Modules -->
-        <div class="dash-wrapper">
-            <div class="section-header"><i class="fas fa-layer-group"></i> Academic Modules</div>
-            <p style="font-size: 14px; margin-top: -10px; color: #64748b;">Select a module below to continue your coursework.</p>
-            
-            <div class="modules-grid">
-                <a href="{{ url_for('student_library') }}" class="mod-item mod-library">
-                    <h4><i class="fas fa-book-open" style="color: #00d2ff;"></i> Kithab Library</h4>
-                    <p>Browse digital texts, references, and securely distributed study PDFs.</p>
-                </a>
-                
-                <a href="{{ url_for('student_classes') }}" class="mod-item mod-classes">
-                    <h4><i class="fas fa-chalkboard" style="color: #8b5cf6;"></i> My Classes</h4>
-                    <p>Access subject lectures, syllabus updates, and active course sessions.</p>
-                </a>
-                
-                <a href="{{ url_for('student_notes') }}" class="mod-item mod-notes">
-                    <h4><i class="fas fa-edit" style="color: #f59e0b;"></i> My Notes</h4>
-                    <p>Review teacher-curated lecture notes, summaries, and key takeaways.</p>
-                </a>
-                
-                <a href="{{ url_for('student_works') }}" class="mod-item mod-works">
-                    <h4><i class="fas fa-tasks" style="color: #10b981;"></i> Works & Tasks</h4>
-                    <p>Track homework assignments, ongoing revisions, and upcoming deadlines.</p>
-                </a>
             </div>
-        </div>
 
-        <!-- Academic Performance Table -->
-        <div class="dash-wrapper">
-            <div class="section-header"><i class="fas fa-chart-line"></i> Performance & Grades</div>
-            
-            <div style="overflow-x: auto; margin-top: 10px;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Subject Module</th>
-                            <th>Student</th>
-                            <th style="text-align: right;">Final Score</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% if grades %}
-                            {% for g in grades %}
-                            <tr>
-                                <td><strong>{{ g[2] }}</strong></td>
-                                <td><span>{{ g[1] }}</span></td>
-                                <td style="text-align: right;">
-                                    <strong style="font-size: 16px;">{{ g[3] }}%</strong>
-                                    <span class="status-badge">Recorded</span>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        {% else %}
-                            <tr>
-                                <td colspan="3" style="text-align: center; color: #94a3b8; padding: 20px;">No exam evaluations posted yet.</td>
-                            </tr>
-                        {% endif %}
-                    </tbody>
-                </table>
+            <!-- RECENT WORKS -->
+            <div class="dash-wrapper" style="margin-bottom: 0;">
+                <div class="section-header"><i class="fas fa-tasks" style="color: #10b981;"></i> Recent Homework Status</div>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead><tr><th>Task Title</th><th>Status</th><th>Grade</th></tr></thead>
+                        <tbody>
+                            {% if works %}
+                                {% for w in works %}
+                                <tr>
+                                    <td><strong style="color: var(--text-main); font-size: 13px;">{{ w[0] }}</strong></td>
+                                    <td>
+                                        {% if w[1] == 'Graded' or w[1] == 'Approved' %}<span class="badge badge-graded"><i class="fas fa-check"></i> Graded</span>
+                                        {% elif w[1] == 'Pending' %}<span class="badge badge-pending"><i class="fas fa-hourglass-half"></i> Submitted</span>
+                                        {% else %}<span style="font-size: 12px; color: var(--text-sub);">Not Submitted</span>{% endif %}
+                                    </td>
+                                    <td>{% if w[2] %}<strong style="color: #10b981;">{{ w[2] }}</strong>{% else %}<span style="color: var(--text-sub);">-</span>{% endif %}</td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr><td colspan="3" style="text-align: center; color: var(--text-sub); padding: 20px;">No recent homework available.</td></tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+                <div style="margin-top: 15px; text-align: right;">
+                    <a href="{{ url_for('student_works') }}" style="color: #0ea5e9; font-size: 12px; text-decoration: none; font-weight: 700;">View All Assignments <i class="fas fa-arrow-right"></i></a>
+                </div>
             </div>
         </div>
     </main>
+
+    <script>
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const themeText = document.getElementById('theme-text');
+        
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeIcon.className = 'fa-solid fa-sun';
+            themeText.textContent = 'Light Mode';
+        }
+        themeToggleBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark');
+                themeIcon.className = 'fa-solid fa-sun';
+                themeText.textContent = 'Light Mode';
+            } else {
+                localStorage.setItem('theme', 'light');
+                themeIcon.className = 'fa-solid fa-moon';
+                themeText.textContent = 'Dark Mode';
+            }
+        });
+    </script>
 </body>
 </html>
